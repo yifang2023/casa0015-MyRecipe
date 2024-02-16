@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "666564843841",
+    "project_id": "babyguardian-62662",
+    "storage_bucket": "babyguardian-62662.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:666564843841:android:0c542563184b0d30f629c0",
+        "android_client_info": {
+          "package_name": "com.example.babyguardian_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDP7nhlT4KYXxu3Yr6YeDc8bbP_KjOlw1c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:666564843841:android:663508d55d8cd686f629c0",
+        "android_client_info": {
+          "package_name": "com.example.my_recipe_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDP7nhlT4KYXxu3Yr6YeDc8bbP_KjOlw1c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
