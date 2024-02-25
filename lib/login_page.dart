@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -10,6 +11,27 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  // text controllers
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  // sign in function
+  Future signIn() async {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      //use the text controllers to get the user input
+      email: _emailController.text.trim(),
+      password: _passwordController.text.trim(),
+    );
+  }
+
+  // dispose the controllers, to avoid memory leaks
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,6 +69,7 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: TextField(
+                  controller: _emailController, //第二次commit
                   decoration: InputDecoration(
                     enabledBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.white),
@@ -71,6 +94,8 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: TextField(
+                  controller:
+                      _passwordController, //第二次commit, 一旦用户输入，就会被存储在这个controller里
                   decoration: InputDecoration(
                     enabledBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.white),
@@ -94,11 +119,13 @@ class _LoginPageState extends State<LoginPage> {
               // sign in button
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
+                // call the signIn function when the user taps the button
                 child: GestureDetector(
+                  onTap: signIn,
                   child: Container(
                     padding: EdgeInsets.all(20),
                     decoration: const BoxDecoration(
-                      color: Color.fromARGB(197, 134, 211, 219),
+                      color: Color.fromARGB(197, 143, 180, 193),
                       borderRadius: BorderRadius.all(Radius.circular(12)),
                     ),
                     child: const Center(
@@ -117,7 +144,8 @@ class _LoginPageState extends State<LoginPage> {
 
               // register button
               const Row(
-                mainAxisAlignment: MainAxisAlignment.center, // center the text
+                // center the text
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     "Not a member?",
@@ -128,7 +156,7 @@ class _LoginPageState extends State<LoginPage> {
                   Text(
                     " Sign Up Now",
                     style: TextStyle(
-                      color: Color.fromARGB(197, 24, 158, 173),
+                      color: Color.fromARGB(198, 13, 172, 226),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
