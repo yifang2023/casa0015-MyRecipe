@@ -77,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     focusedBorder: const OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Color.fromARGB(199, 230, 42, 0),
+                        color: Color.fromARGB(197, 143, 180, 193),
                       ),
                       borderRadius: BorderRadius.all(Radius.circular(12)),
                     ),
@@ -94,8 +94,7 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: TextField(
-                  controller:
-                      _passwordController, //第二次commit, 一旦用户输入，就会被存储在这个controller里
+                  controller: _passwordController,
                   decoration: InputDecoration(
                     enabledBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.white),
@@ -103,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     focusedBorder: const OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Color.fromARGB(199, 230, 42, 0),
+                        color: Color.fromARGB(197, 143, 180, 193),
                       ),
                       borderRadius: BorderRadius.all(Radius.circular(12)),
                     ),
