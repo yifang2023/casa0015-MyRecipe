@@ -1,7 +1,7 @@
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:MyRecipe/main_page.dart'; //第二次commit
+import 'package:MyRecipe/auth/main_page.dart'; //第二次commit
 import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {

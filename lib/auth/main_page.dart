@@ -1,7 +1,8 @@
+import 'package:MyRecipe/auth/auth_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:MyRecipe/login_page.dart';
-import 'package:MyRecipe/home_page.dart';
+import 'package:MyRecipe/pages/login_page.dart';
+import 'package:MyRecipe/pages/home_page.dart';
 
 // mian page
 class MainPage extends StatelessWidget {
@@ -17,7 +18,7 @@ class MainPage extends StatelessWidget {
           if (snapshot.hasData) {
             return HomePage();
           } else {
-            return LoginPage();
+            return AuthPage();
           }
         },
       ),

@@ -1,10 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  // showSignUp function
+  final VoidCallback showSignUpPage;
+  const LoginPage({Key? key, required this.showSignUpPage}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -95,6 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: TextField(
                   controller: _passwordController,
+                  obscureText: true,
                   decoration: InputDecoration(
                     enabledBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.white),
@@ -142,21 +146,24 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 25),
 
               // register button
-              const Row(
+              Row(
                 // center the text
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     "Not a member?",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text(
-                    " Sign Up Now",
-                    style: TextStyle(
-                      color: Color.fromARGB(198, 13, 172, 226),
-                      fontWeight: FontWeight.bold,
+                  GestureDetector(
+                    onTap: widget.showSignUpPage,
+                    child: const Text(
+                      " Sign Up Now",
+                      style: TextStyle(
+                        color: Color.fromARGB(198, 13, 172, 226),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],
