@@ -23,6 +23,10 @@ class MyBottomNavBar extends StatelessWidget {
           text: 'Recipe',
         ),
         GButton(
+          icon: Icons.restaurant,
+          text: 'Restaurants',
+        ),
+        GButton(
           icon: Icons.settings,
           text: 'Settings',
         ),
