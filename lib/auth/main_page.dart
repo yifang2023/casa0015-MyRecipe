@@ -15,6 +15,7 @@ class MainPage extends StatelessWidget {
         // check if the user is signed in or not
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
+          print(snapshot.data);
           if (snapshot.hasData) {
             return HomePage();
           } else {
