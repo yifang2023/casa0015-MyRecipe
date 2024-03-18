@@ -27,25 +27,27 @@ class RecipeCard extends StatelessWidget {
                 BorderRadius.vertical(top: Radius.circular(12)), // 图片顶部圆角
             child: Image.network(
               imageUrl,
-              height: 120, // 图片高度
+              height: 160, // 图片高度
               width: double.infinity, // 图片宽度填满卡片
               fit: BoxFit.cover,
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(
-              title,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+            child: Center(
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis, // 文字超出部分显示省略号
               ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis, // 文字超出部分显示省略号
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
+            padding: const EdgeInsets.only(left: 100, bottom: 8.0),
             child: Text(
               duration,
               style: TextStyle(
