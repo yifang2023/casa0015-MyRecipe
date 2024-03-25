@@ -2,7 +2,7 @@ import 'package:MyRecipe/components/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:MyRecipe/components/bottom_nav_bar.dart';
-import 'package:MyRecipe/pages/recipe_page.dart';
+import 'package:MyRecipe/pages/recipe/recipe_page.dart';
 import 'package:MyRecipe/pages/settings_page.dart';
 import 'package:MyRecipe/pages/restaurant_page.dart';
 

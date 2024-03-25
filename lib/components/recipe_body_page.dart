@@ -71,7 +71,7 @@ class _CategoriesState extends State<Categories> {
   List<String> categories = [
     'All',
     'Starters',
-    'Maincourse',
+    'Main course',
     'Soups',
     'Disserts'
   ];
