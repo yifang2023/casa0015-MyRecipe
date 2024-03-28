@@ -28,7 +28,7 @@ class RecipeBean {
     title = json?['title'] ?? "";
     coverUrl = json?['coverUrl'] ?? "";
     introduce = json?['introduce'] ?? "";
-    classifyName = json?['classifyName'] ?? "";
+    classifyName = json?['clas sifyName'] ?? "";
     classifyCode = json?['classifyCode'] ?? "";
     duration = json?['duration'] ?? "";
 

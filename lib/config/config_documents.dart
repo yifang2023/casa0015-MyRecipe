@@ -1,5 +1,8 @@
+/// A configuration class to manage constants and settings for document handling within an application.
+/// This class primarily deals with identifiers for recipe classifications and recipe documents,
+/// and also manages a user identifier.
+
 class DocumentsConfig {
-  /// 分类tab 表格
   static String recipeClassify = "recipe_classify";
   static String recipe = "recipe";
 

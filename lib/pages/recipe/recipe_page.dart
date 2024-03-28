@@ -5,7 +5,8 @@ import 'package:MyRecipe/utils/utils_logger.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 part 'recipe_card.dart';
 
 class RecipePage extends StatefulWidget {
@@ -96,30 +97,55 @@ class _RecipePageState extends State<RecipePage>
     );
   }
 
+  // Widget _buildHeader(BuildContext context) {
+  //   return SafeArea(
+  //     child: SizedBox(
+  //       height: 44,
+  //       child: Stack(
+  //         children: [
+  //           const Center(
+  //             child: Text(
+  //               'Recipe Page',
+  //               style: TextStyle(fontSize: 18),
+  //             ),
+  //           ),
+  //           Align(
+  //             alignment: Alignment.centerRight,
+  //             child: IconButton(
+  //               onPressed: () {
+  //                 _add(context);
+  //               },
+  //               icon: const Icon(Icons.add),
+  //             ),
+  //           )
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
   Widget _buildHeader(BuildContext context) {
-    return SafeArea(
-      child: SizedBox(
-        height: 44,
-        child: Stack(
-          children: [
-            const Center(
-              child: Text(
-                'Recipe Page',
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: IconButton(
-                onPressed: () {
-                  _add(context);
-                },
-                icon: const Icon(Icons.add),
-              ),
-            )
-          ],
+    return AppBar(
+      backgroundColor: Color(0xFFE9EFF9),
+      elevation: 0, // Remove shadow if needed
+      centerTitle: true, // Center the title
+      title: Text(
+        'My Recipe',
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Color(0xFF001F4C),
         ),
       ),
+      actions: <Widget>[
+        IconButton(
+          onPressed: () {
+            _add(context);
+          },
+          icon: const Icon(Icons.add_box_rounded),
+          color: Color(0xFF001F4C),
+        ),
+      ],
     );
   }
 
@@ -135,24 +161,24 @@ class _RecipePageState extends State<RecipePage>
 
   Widget _buildSearch(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      margin: const EdgeInsets.fromLTRB(20, 25, 20, 10),
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       decoration: BoxDecoration(
-        color: Colors.blue[50],
-        borderRadius: BorderRadius.circular(25),
+        color: Color(0xFFF2F4FB), // Set the background color of the search box
+        borderRadius: BorderRadius.circular(18),
       ),
       child: Row(
         children: <Widget>[
           Icon(
             Icons.search,
-            color: Colors.blue[500],
+            color: Colors.grey[500],
           ),
           const SizedBox(width: 10),
           Expanded(
             child: TextField(
               controller: _searchController,
               style: TextStyle(
-                color: Colors.blue[500],
+                color: Colors.black,
               ),
               onSubmitted: (content) {
                 _search(context, content);
@@ -163,7 +189,7 @@ class _RecipePageState extends State<RecipePage>
                 border: InputBorder.none,
                 hintText: 'Search for recipes',
                 hintStyle: TextStyle(
-                  color: Colors.blue[500],
+                  color: Colors.grey[500],
                 ),
               ),
             ),
@@ -195,7 +221,33 @@ class _RecipePageState extends State<RecipePage>
     );
   }
 
+  // Widget _buildCategoryItem(int index) {
+  //   return GestureDetector(
+  //     onTap: () {
+  //       _changeTab(index);
+  //     },
+  //     behavior: HitTestBehavior.opaque,
+  //     child: Container(
+  //       alignment: Alignment.center,
+  //       padding: const EdgeInsets.symmetric(horizontal: 15),
+  //       margin: const EdgeInsets.only(left: 20),
+  //       decoration: BoxDecoration(
+  //         color: _selectedIndex == index ? Colors.blue[50] : Colors.transparent,
+  //         borderRadius: BorderRadius.circular(8),
+  //       ),
+  //       child: Text(
+  //         _tabs[index].name,
+  //         style: TextStyle(
+  //           fontWeight: FontWeight.bold,
+  //           color: Colors.blue[500],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
   Widget _buildCategoryItem(int index) {
+    bool isSelected = _selectedIndex == index; // Check if the tab is selected
     return GestureDetector(
       onTap: () {
         _changeTab(index);
@@ -206,14 +258,18 @@ class _RecipePageState extends State<RecipePage>
         padding: const EdgeInsets.symmetric(horizontal: 15),
         margin: const EdgeInsets.only(left: 20),
         decoration: BoxDecoration(
-          color: _selectedIndex == index ? Colors.blue[50] : Colors.transparent,
+          color: isSelected
+              ? Color(0xFF001F4C)
+              : Color(0xFFF2F4FB), // Change background color based on selection
           borderRadius: BorderRadius.circular(8),
         ),
         child: Text(
           _tabs[index].name,
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: Colors.blue[500],
+            color: isSelected
+                ? Colors.white
+                : Colors.black, // Change text color based on selection
           ),
         ),
       ),
@@ -232,9 +288,48 @@ class _RecipePageState extends State<RecipePage>
   }
 
   Widget _buildContent(BuildContext context) {
+    // if (_dataList.isEmpty) {
+    //   return const Center(
+    //     child: Text("no data"),
+    //   );
+    // }
     if (_dataList.isEmpty) {
-      return const Center(
-        child: Text("no data"),
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image.asset(
+              'asset/recipe.png', // Replace with your asset image path
+              width: 200, // Set the image width to fit your design
+              height: 200, // Set the image height to fit your design
+            ),
+            SizedBox(height: 20), // Provide some spacing between image and text
+            const Text(
+              'No recipes yet. Start creating your recipe now!',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                //设置字体颜色为灰色
+                color: Colors.grey,
+                fontSize: 16, // Adjust the font size as needed
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ), // Provide some spacing between text and button
+            ElevatedButton(
+              onPressed: () {
+                // Add your onPressed function here
+                _add(context);
+              },
+              child: const Text('Add new recipe'),
+              style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor:
+                      Color(0xFF001F4C) // Set the text color for the button
+                  ),
+            ),
+          ],
+        ),
       );
     }
     return GridView.builder(

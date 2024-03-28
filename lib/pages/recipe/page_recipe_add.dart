@@ -153,7 +153,7 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
           ),
         ),
         centerTitle: true,
-        backgroundColor: Color.fromRGBO(233, 239, 249, 1),
+        backgroundColor: Color.fromRGBO(233, 239, 249, 1), // 顶部导航栏背景色
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () => Navigator.pop(context), // 关闭当前页面
@@ -168,7 +168,7 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
               TextField(
                 controller: _titleTextEditingController,
                 decoration: InputDecoration(
-                  hintText: 'Recipe Title',
+                  hintText: 'Recipe Title', // 菜谱标题提示文本
                   // 加粗字体
                   hintStyle: const TextStyle(
                     fontWeight: FontWeight.bold,
@@ -196,6 +196,7 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
               TextField(
                 controller: _durationTextEditingController,
                 decoration: const InputDecoration(
+                    // 输入做饭时长
                     labelText: 'Duration (e.g., 1 hr 20 min)'),
               ),
               ..._buildMaterial(),
@@ -297,7 +298,7 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
         ),
         child: Row(
           children: [
-            const Text("Category"),
+            const Text("Category"), //分类
             Expanded(
               child: Text(
                 _classify == null ? "" : "${_classify?.name}",
