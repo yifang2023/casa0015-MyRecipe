@@ -7,10 +7,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
+// 引入一个局部文件，该文件定义了添加菜谱时需要的模型
 part 'model_recipe_add.dart';
 
+// 定义RecipeAddPage类，它是一个有状态的小部件（StatefulWidget），用于添加或编辑菜谱
 class RecipeAddPage extends StatefulWidget {
   final RecipeBean? data;
 
@@ -20,18 +23,52 @@ class RecipeAddPage extends StatefulWidget {
   State<RecipeAddPage> createState() => _RecipeAddPageState();
 }
 
+// 定义内部的State类，用于管理状态和事件处理
 class _RecipeAddPageState extends State<RecipeAddPage> {
   final ImagePicker _picker = ImagePicker();
 
+  // 文本控制器，用于获取用户输入的文本
   late TextEditingController _titleTextEditingController;
   late TextEditingController _introduceTextEditingController;
   late TextEditingController _durationTextEditingController;
-  String _coverUrl = "";
-  List<_RecipeMaterialsModel> _materials = [];
-  RecipeClassifyBean? _classify;
-  List<TextEditingController> _steps = [];
-  final List<RecipeClassifyBean> _list = [];
+  String _coverUrl = ""; // 菜谱封面图片的URL
+  List<_RecipeMaterialsModel> _materials = []; // 存储食材信息的列表
+  RecipeClassifyBean? _classify; // 分类信息
+  List<TextEditingController> _steps = []; // 存储步骤信息的控制器列表
+  final List<RecipeClassifyBean> _list = []; // 分类信息列表
+  TextEditingController _hoursController = TextEditingController();
+  TextEditingController _minutesController = TextEditingController();
 
+  // 新增显示时长选择器的方法
+  // 选择器包括两个文本框，分别用于输入小时和分钟
+  Future<void> _showDurationPicker(BuildContext context,
+      TextEditingController controller, String label) async {
+    // 这里可以使用Flutter自带的showTimePicker，或者自定义picker
+    // 例如使用CupertinoTimerPicker
+    await showModalBottomSheet(
+      context: context,
+      builder: (BuildContext builder) {
+        return Container(
+          height: MediaQuery.of(context).copyWith().size.height / 3,
+          child: CupertinoTimerPicker(
+            mode: CupertinoTimerPickerMode.hm, // 时和分
+            onTimerDurationChanged: (Duration changedtimer) {
+              setState(() {
+                // 更新时和分的控制器
+                _hoursController.text = changedtimer.inHours.toString();
+                _minutesController.text =
+                    (changedtimer.inMinutes % 60).toString();
+              });
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  // 提交用户输入的菜谱数据到数据库的方法
+  // 检查封面图片URL、标题、简介、时长、分类和步骤是否为空，如果为空则不提交
+  // 如果检查通过，则构造一个新的RecipeBean对象，并根据是新增还是更新操作将数据提交到数据库
   void _submitData(BuildContext context) {
     if (_coverUrl.isEmpty) {
       return;
@@ -114,6 +151,8 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
     }
   }
 
+  // 初始化文本控制器，获取或设置默认值
+  // 获取分类列表
   @override
   void initState() {
     _titleTextEditingController =
@@ -141,6 +180,7 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
     super.initState();
   }
 
+// 构建UI界面，包括AppBar、ListView和底部的发布按钮
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -164,41 +204,37 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
           ListView(
             padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
             children: [
-              _buildCover(context),
-              TextField(
-                controller: _titleTextEditingController,
-                decoration: InputDecoration(
-                  hintText: 'Recipe Title', // 菜谱标题提示文本
-                  // 加粗字体
-                  hintStyle: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 26,
-                  ),
-                  enabledBorder: const UnderlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Color(0xFFE0E0E0)), // 设置下划线颜色为浅灰色
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        color: Theme.of(context).primaryColor), // 聚焦时保持主题颜色
+              _buildCover(context), // 调用封面图片选择和预览的Widget
+              Padding(
+                padding: const EdgeInsets.only(left: 15),
+                child: TextField(
+                  controller: _titleTextEditingController,
+                  decoration: InputDecoration(
+                    hintText: 'Recipe Title...', // 菜谱标题提示文本
+                    // 加粗字体
+                    hintStyle: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 26,
+                      // 设置成灰色
+                      color: Color(0xFFBDBDBD),
+                    ),
+                    border:
+                        InputBorder.none, // Removing any form of input border
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFF001F4C),
+                      ), // 设置下划线颜色
+                    ),
                   ),
                 ),
               ),
-              TextField(
-                controller: _introduceTextEditingController,
-                decoration: const InputDecoration(
-                  border: InputBorder.none, // 移除边界装饰
-                  hintText: 'Story behind this dish...',
-                ),
-                maxLines: 3,
-              ),
-              _item2(context),
-              TextField(
-                controller: _durationTextEditingController,
-                decoration: const InputDecoration(
-                    // 输入做饭时长
-                    labelText: 'Duration (e.g., 1 hr 20 min)'),
-              ),
+
+              _buildIntroduction(), // 调用introduction输入框的Widget
+              SizedBox(height: 15),
+              _buildDurationPicker(context), // 调用时长输入框的Widget
+
+              _item2(context), // 调用分类选择器的Widget
+
               ..._buildMaterial(),
               ..._buildStep(),
               const SizedBox(
@@ -222,6 +258,127 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
     );
   }
 
+// 构建时长输入框及其标签的widget
+  Widget _buildDurationPicker(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Text(
+            "Duration:", // 时长输入框上面的文字
+            style: TextStyle(
+              color: Color(0xFF0059D8), // 字体颜色
+              fontWeight: FontWeight.bold, // 字体加粗
+              fontSize: 16, // 字体大小
+            ),
+          ),
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            Expanded(
+              child: _buildDurationTextField(
+                context,
+                _hoursController,
+                'hr', // 将标签文本'hr'传入
+              ),
+            ),
+            SizedBox(width: 10), // 添加间距
+            Expanded(
+              child: _buildDurationTextField(
+                context,
+                _minutesController,
+                'min', // 将标签文本'min'传入
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+// 构建单个时长输入框，包括文本框和固定标签
+  Widget _buildDurationTextField(
+      BuildContext context, TextEditingController controller, String label) {
+    return InkWell(
+      onTap: () => _showDurationPicker(context, controller, label),
+      borderRadius: BorderRadius.circular(12), // 添加点击效果的圆角
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: Text(
+                controller.text.isEmpty ? 'choose ' : controller.text,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black54,
+                ),
+              ),
+            ),
+            Text(label), // 显示'hr'或'min'标签
+          ],
+        ),
+      ),
+    );
+  }
+
+// 构建introduction输入框的widget，包括标题和输入框
+  _buildIntroduction() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Text(
+            "Introduction:", // Label outside the container
+            style: TextStyle(
+              color: Color(0xFF0059D8), // Blue color for the label
+              fontSize: 16, // Font size
+              fontWeight: FontWeight.bold, // Bold font weight
+            ),
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5), // Shadow color
+                spreadRadius: 1,
+                blurRadius: 6,
+                offset: Offset(0, 3), // Shadow position
+              ),
+            ],
+            borderRadius: BorderRadius.circular(12), // Rounded corners
+            color: Colors.white, // Background color of the container
+          ),
+          child: TextField(
+            controller: _introduceTextEditingController,
+            decoration: InputDecoration(
+              hintText: 'Story behind this dish...', // Placeholder text
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(
+                    12), // Rounded corners for the TextField
+                borderSide: BorderSide.none, // No border line
+              ),
+              filled: true,
+              fillColor: Colors.white, // Fill color inside the text field
+            ),
+            maxLines: 2, // Allows text to wrap up to three lines
+          ),
+        ),
+      ],
+    );
+  }
+
+  // 构建封面图片选择和预览的Widget
   _buildCover(BuildContext context) {
     if (_coverUrl.isNotEmpty) {
       return Stack(
@@ -250,13 +407,44 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
         ],
       );
     } else {
-      return OutlinedButton(
-        onPressed: () => _showStyle(context),
-        child: const Text('Add Cover Image'),
+      // return OutlinedButton(
+      //   onPressed: () => _showStyle(context),
+      //   child: const Text('Add Cover Image'),
+      // );
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: OutlinedButton(
+              onPressed: () => _showStyle(context),
+              style: OutlinedButton.styleFrom(
+                shape: RoundedRectangleBorder(), // Removing the circle shape
+                padding: EdgeInsets.all(16), // Padding around the icon
+                side: BorderSide.none, // Remove the outline border
+              ),
+              child: Icon(
+                Icons.add_a_photo_rounded, // Icon to add a photo
+                color: Color(0xFF001F4C), // Setting the icon color
+                size: 80, // Increasing the icon size
+              ),
+            ),
+          ),
+          Text(
+            'Add Cover Image', // Button text
+            style: TextStyle(
+              color: Color(0xFF001F4C),
+              fontSize: 16,
+              //加粗字体
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
       );
     }
   }
 
+  // 构建一个带有左右文本框的容器，通常用于输入成对的数据
   _item(String leftText, TextEditingController controller) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -283,6 +471,7 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
     );
   }
 
+  // 构建分类选择器的Widget
   _item2(
     BuildContext context,
   ) {
@@ -312,6 +501,7 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
     );
   }
 
+  // 显示图片选择底部弹出菜单，并处理图片选择结果
   void _showStyle(BuildContext context) async {
     var res = await showModalBottomSheet(
         context: context,
@@ -358,6 +548,7 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
     }
   }
 
+// 选择图片后上传到Firebase Storage，并获取下载URL
   Future<void> _selectPic(ImageSource source) async {
     try {
       final XFile? photo = await _picker.pickImage(source: source);
@@ -380,6 +571,7 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
     }
   }
 
+// 构建食材输入列表
   _buildMaterial() {
     return [
       ListView.separated(
@@ -428,6 +620,7 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
     ];
   }
 
+  // 构建步骤输入列表
   _buildStep() {
     return [
       ListView.separated(
@@ -465,6 +658,7 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
     ];
   }
 
+// 显示分类选择底部弹出菜单，并处理分类选择结果
   void _showTabs(BuildContext context) async {
     if (_list.isEmpty) {
       return;
@@ -512,6 +706,7 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
     }
   }
 
+// 从数据库获取分类信息列表
   void _getRecipeClassifyList() async {
     try {
       var res = await FirebaseFirestore.instance
