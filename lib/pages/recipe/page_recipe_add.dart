@@ -233,7 +233,8 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
               SizedBox(height: 15),
               _buildDurationPicker(context), // 调用时长输入框的Widget
 
-              _item2(context), // 调用分类选择器的Widget
+              // _item2(context), // 调用分类选择器的Widget
+              _buildCategorySelector(),
 
               ..._buildMaterial(),
               ..._buildStep(),
@@ -281,6 +282,7 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
               child: _buildDurationTextField(
                 context,
                 _hoursController,
+                // 将标签文本加粗怎么写？
                 'hr', // 将标签文本'hr'传入
               ),
             ),
@@ -314,11 +316,13 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
         child: Row(
           children: <Widget>[
             Expanded(
-              child: Text(
-                controller.text.isEmpty ? 'choose ' : controller.text,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.black54,
+              child: Center(
+                child: Text(
+                  controller.text.isEmpty ? 'choose ' : controller.text,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black54,
+                  ),
                 ),
               ),
             ),
@@ -467,36 +471,6 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
             ),
           )
         ],
-      ),
-    );
-  }
-
-  // 构建分类选择器的Widget
-  _item2(
-    BuildContext context,
-  ) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () {
-        _showTabs(context);
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(color: Colors.grey)),
-        ),
-        child: Row(
-          children: [
-            const Text("Category"), //分类
-            Expanded(
-              child: Text(
-                _classify == null ? "" : "${_classify?.name}",
-                textAlign: TextAlign.end,
-              ),
-            ),
-            const Icon(Icons.keyboard_arrow_right)
-          ],
-        ),
       ),
     );
   }
@@ -658,52 +632,158 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
     ];
   }
 
-// 显示分类选择底部弹出菜单，并处理分类选择结果
-  void _showTabs(BuildContext context) async {
-    if (_list.isEmpty) {
-      return;
-    }
-    var res = await showModalBottomSheet(
-        context: context,
-        builder: (ctx) {
-          return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            color: Colors.white,
-            height: 500,
-            child: ListView.separated(
-                itemBuilder: (ctx, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pop(_list[index]);
-                    },
-                    behavior: HitTestBehavior.opaque,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Text(
-                        _list[index].name,
-                        style: TextStyle(
-                          color: _classify?.code == _list[index].code
-                              ? Colors.red
-                              : Colors.black,
-                        ),
-                      ),
-                    ),
-                  );
-                },
-                separatorBuilder: (ctx, index) {
-                  return Container(
-                    height: 1,
-                    color: Colors.grey,
-                  );
-                },
-                itemCount: _list.length),
-          );
+// // 构建分类选择器的Widget
+//   _item2(
+//     BuildContext context,
+//   ) {
+//     return GestureDetector(
+//       behavior: HitTestBehavior.opaque,
+//       onTap: () {
+//         _showTabs(context);
+//       },
+//       child: Container(
+//         padding: const EdgeInsets.symmetric(vertical: 10),
+//         decoration: const BoxDecoration(
+//           border: Border(bottom: BorderSide(color: Colors.grey)),
+//         ),
+//         child: Row(
+//           children: [
+//             const Text("Category"), //分类
+//             Expanded(
+//               child: Text(
+//                 _classify == null ? "" : "${_classify?.name}",
+//                 textAlign: TextAlign.end,
+//               ),
+//             ),
+//             const Icon(Icons.keyboard_arrow_right)
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+
+// // 显示分类选择底部弹出菜单，并处理分类选择结果
+//   void _showTabs(BuildContext context) async {
+//     if (_list.isEmpty) {
+//       return;
+//     }
+//     var res = await showModalBottomSheet(
+//         context: context,
+//         builder: (ctx) {
+//           return Container(
+//             padding: const EdgeInsets.symmetric(horizontal: 15),
+//             color: Colors.white,
+//             height: 500,
+//             child: ListView.separated(
+//                 itemBuilder: (ctx, index) {
+//                   return GestureDetector(
+//                     onTap: () {
+//                       Navigator.of(context).pop(_list[index]);
+//                     },
+//                     behavior: HitTestBehavior.opaque,
+//                     child: Padding(
+//                       padding: const EdgeInsets.symmetric(vertical: 10),
+//                       child: Text(
+//                         _list[index].name,
+//                         style: TextStyle(
+//                           color: _classify?.code == _list[index].code
+//                               ? Colors.red
+//                               : Colors.black,
+//                         ),
+//                       ),
+//                     ),
+//                   );
+//                 },
+//                 separatorBuilder: (ctx, index) {
+//                   return Container(
+//                     height: 1,
+//                     color: Colors.grey,
+//                   );
+//                 },
+//                 itemCount: _list.length),
+//           );
+//         });
+//     if (res != null) {
+//       setState(() {
+//         _classify = res;
+//       });
+//     }
+//   }
+
+// 构建分类选择器的Widget
+  Widget _buildCategorySelector() {
+    // 过滤掉名称为'all'的分类
+    List<RecipeClassifyBean> filteredList =
+        _list.where((e) => e.name.toLowerCase() != 'all').toList();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          child: Text(
+            "Category:", // 分类标签文本
+            style: TextStyle(
+              color: Color(0xFF0059D8), // 字体颜色蓝色
+              fontWeight: FontWeight.bold, // 字体加粗
+              fontSize: 16, // 字体大小
+            ),
+          ),
+        ),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            // children: _list.map((e) => _buildCategoryTab(context, e)).toList(),
+            children:
+                filteredList.map((e) => _buildCategoryTab(context, e)).toList(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // 构建单个分类Tab的Widget
+  Widget _buildCategoryTab(BuildContext context, RecipeClassifyBean category) {
+    bool isSelected = _classify == category; // 检查是否选中
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _classify = category; // 更新选中的分类
         });
-    if (res != null) {
-      setState(() {
-        _classify = res;
-      });
-    }
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        margin: const EdgeInsets.all(4), // 为每个Tab添加边距
+        decoration: BoxDecoration(
+          color: isSelected
+              ? Color(0xFF0059D8)
+              : Colors.transparent, // 根据是否选中设置背景颜色
+          borderRadius: BorderRadius.circular(20), // 圆角边框
+          border: Border.all(
+            color: Color(0xFF0059D8), // 蓝色边框
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              category.name,
+              style: TextStyle(
+                color: isSelected
+                    ? Colors.white
+                    : Color(0xFF0059D8), // 根据是否选中设置文本颜色
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            // if (isSelected) // 如果选中，显示对勾图标
+            //   Icon(Icons.check_circle, color: Colors.white, size: 24),
+            if (isSelected) // 如果选中，在文本和对勾图标之间增加空间
+              SizedBox(width: 6), // 你可以根据需要调整宽度
+            if (isSelected) // 如果选中，显示对勾图标
+              Icon(Icons.check_circle, color: Colors.white, size: 24),
+          ],
+        ),
+      ),
+    );
   }
 
 // 从数据库获取分类信息列表
