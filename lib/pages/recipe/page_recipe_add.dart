@@ -209,10 +209,10 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
                 padding: const EdgeInsets.only(left: 15),
                 child: TextField(
                   controller: _titleTextEditingController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: 'Recipe Title...', // 菜谱标题提示文本
                     // 加粗字体
-                    hintStyle: const TextStyle(
+                    hintStyle: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 26,
                       // 设置成灰色
@@ -232,29 +232,65 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
               _buildIntroduction(), // 调用introduction输入框的Widget
               SizedBox(height: 15),
               _buildDurationPicker(context), // 调用时长输入框的Widget
+              SizedBox(height: 15),
 
               // _item2(context), // 调用分类选择器的Widget
               _buildCategorySelector(),
+              SizedBox(height: 15),
 
-              ..._buildMaterial(),
-              ..._buildStep(),
+              _buildMaterial(),
+              SizedBox(height: 15),
+
+              _buildStep(),
               const SizedBox(
                 height: 60,
               )
             ],
           ),
-          Positioned(
-            left: 20,
-            bottom: 20,
-            right: 20,
-            child: ElevatedButton(
-              child: const Text('Publish Recipe'),
-              onPressed: () {
-                _submitData(context);
-              },
+          // Positioned(
+          //   bottom: 20,
+          //   // 设置按钮左右边距
+          //   left: 110,
+          //   right: 110,
+          //   child: ElevatedButton(
+          //     style: ElevatedButton.styleFrom(
+          //       foregroundColor: Color(0xFF001F4C),
+          //       backgroundColor: Color(0xFFCFE4FF), // 设置按钮文本颜色
+          //       padding: const EdgeInsets.symmetric(
+          //           horizontal: 30, vertical: 15), // 控制按钮的大小
+          //     ),
+          //     child: const Text(
+          //       'Publish',
+          //       style: TextStyle(
+          //         fontSize: 18,
+          //         fontWeight: FontWeight.bold,
+          //       ),
+          //     ),
+          //     onPressed: () {
+          //       _submitData(context);
+          //     },
+          //   ),
+          // ),
+        ],
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.fromLTRB(
+            140, 20, 140, 20), // Increase left and right padding
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Color(0xFF001F4C),
+            backgroundColor: Color(0xFFCFE4FF),
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+            textStyle: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
             ),
           ),
-        ],
+          child: const Text('Publish'),
+          onPressed: () {
+            _submitData(context);
+          },
+        ),
       ),
     );
   }
@@ -264,8 +300,8 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15),
           child: Text(
             "Duration:", // 时长输入框上面的文字
             style: TextStyle(
@@ -282,7 +318,6 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
               child: _buildDurationTextField(
                 context,
                 _hoursController,
-                // 将标签文本加粗怎么写？
                 'hr', // 将标签文本'hr'传入
               ),
             ),
@@ -310,7 +345,9 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
+          border: Border.all(
+            color: Color(0xFF0059D8),
+          ),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
@@ -319,9 +356,9 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
               child: Center(
                 child: Text(
                   controller.text.isEmpty ? 'choose ' : controller.text,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
-                    color: Colors.black54,
+                    color: Color(0xFFBDBDBD),
                   ),
                 ),
               ),
@@ -338,8 +375,8 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15),
           child: Text(
             "Introduction:", // Label outside the container
             style: TextStyle(
@@ -367,6 +404,10 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
             controller: _introduceTextEditingController,
             decoration: InputDecoration(
               hintText: 'Story behind this dish...', // Placeholder text
+              hintStyle: TextStyle(
+                // 设置成灰色
+                color: Color(0xFFBDBDBD),
+              ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(
                     12), // Rounded corners for the TextField
@@ -427,14 +468,14 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
                 padding: EdgeInsets.all(16), // Padding around the icon
                 side: BorderSide.none, // Remove the outline border
               ),
-              child: Icon(
+              child: const Icon(
                 Icons.add_a_photo_rounded, // Icon to add a photo
                 color: Color(0xFF001F4C), // Setting the icon color
                 size: 80, // Increasing the icon size
               ),
             ),
           ),
-          Text(
+          const Text(
             'Add Cover Image', // Button text
             style: TextStyle(
               color: Color(0xFF001F4C),
@@ -545,170 +586,248 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
     }
   }
 
-// 构建食材输入列表
-  _buildMaterial() {
-    return [
-      ListView.separated(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (ctx, index) {
-          var material = _materials[index];
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: material.left,
-                    decoration: const InputDecoration(labelText: 'Ingredient'),
+  Widget _buildStep() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          child: Text(
+            "Recipe:", // 步骤列表的标题
+            style: TextStyle(
+              color: Color(0xFF0059D8), // 字体颜色蓝色
+              fontWeight: FontWeight.bold, // 字体加粗
+              fontSize: 16, // 字体大小
+            ),
+          ),
+        ),
+        //
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: _steps.length,
+          itemBuilder: (ctx, index) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.only(left: 40), // 给左侧文本留出空间
+                    decoration: BoxDecoration(
+                      color: Colors.white, // 设置容器背景色为白色
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5), // 设置阴影颜色
+                          spreadRadius: 2,
+                          blurRadius: 4,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                      borderRadius: BorderRadius.circular(12), // 设置圆角
+                    ),
+                    child: TextField(
+                      controller: _steps[index],
+                      decoration: InputDecoration(
+                        hintText: '  description', // 提示文本
+                        hintStyle: TextStyle(
+                          // 设置成灰色
+                          color: Color(0xFFBDBDBD),
+                        ),
+                        labelText: 'Step ${index + 1}Description', // 设置为输入框的标签
+                        labelStyle:
+                            TextStyle(color: Colors.transparent), // 使标签文本透明
+                        floatingLabelBehavior:
+                            FloatingLabelBehavior.never, // 标签永不浮动
+                        border: const OutlineInputBorder(
+                          borderSide: BorderSide.none, // 无边框
+                        ),
+                        contentPadding: const EdgeInsets.only(
+                          left: 30, // 增加左侧填充
+                          top: 16,
+                          bottom: 16,
+                          right: 16,
+                        ),
+                      ),
+                    ),
                   ),
+                  Positioned(
+                    left: 16,
+                    top: 0,
+                    bottom: 0,
+                    child: Center(
+                      child: Text(
+                        'Step ${index + 1}', // 显示步骤编号
+                        style: const TextStyle(
+                          color: Color(0xFF0059D8), // 字体颜色蓝色
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 15, top: 10),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Color(0xFF001F4C), // 按钮背景颜色
                 ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: TextField(
-                    controller: material.right,
-                    decoration: const InputDecoration(labelText: 'Quantity'),
+                onPressed: () {
+                  // TODO: 实现编辑逻辑
+                },
+                child: const Text('Edit'), // “Edit”按钮文本
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 15, top: 10),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Color(0xFF001F4C), // 按钮背景颜色
+                ),
+                onPressed: () {
+                  setState(() {
+                    // 添加新的步骤控制器
+                    _steps.add(TextEditingController());
+                  });
+                },
+                child: const Text('Add more'), // “Add more”按钮文本
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+// 构建食材输入框的Widget
+  Widget _buildMaterial() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: 15,
+          ), // 缩小标题与输入框的垂直距离
+          child: Text(
+            "Ingredients:", // 食材列表的标题
+            style: TextStyle(
+              color: Color(0xFF0059D8), // 字体颜色蓝色
+              fontWeight: FontWeight.bold, // 字体加粗
+              fontSize: 16, // 字体大小
+            ),
+          ),
+        ),
+        ListView.builder(
+          // 从ListView.separated更改为ListView.builder
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemBuilder: (ctx, index) {
+            var material = _materials[index];
+            return Padding(
+              padding: EdgeInsets.fromLTRB(
+                  15, index == 0 ? 8 : 4, 15, 4), // 调整上下padding，减小两行之间的距离
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: material.left,
+                      decoration: const InputDecoration(
+                        hintText: 'e.g. milk', // 左边输入框的提示词
+                        hintStyle: TextStyle(
+                          // 设置成灰色
+                          color: Color(0xFFBDBDBD),
+                        ),
+                        floatingLabelBehavior:
+                            FloatingLabelBehavior.never, // 用户点击输入时标签不浮动
+                        enabledBorder: UnderlineInputBorder(
+                          // 默认情况下的边框
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          // 获取焦点时的边框
+                          borderSide:
+                              BorderSide(color: Color(0xFF0059D8)), // 蓝色边框
+                        ),
+                      ),
+                    ),
                   ),
-                )
-              ],
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: TextField(
+                      controller: material.right,
+                      decoration: const InputDecoration(
+                        hintText: 'quantity', // 右边输入框的提示词
+                        hintStyle: TextStyle(
+                          // 设置成灰色
+                          color: Color(0xFFBDBDBD),
+                        ),
+                        floatingLabelBehavior:
+                            FloatingLabelBehavior.never, // 用户点击输入时标签不浮动
+                        enabledBorder: UnderlineInputBorder(
+                          // 默认情况下的边框
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          // 获取焦点时的边框
+                          borderSide:
+                              BorderSide(color: Color(0xFF0059D8)), // 蓝色边框
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            );
+          },
+          itemCount: _materials.length,
+        ),
+        Row(
+          // mainAxisAlignment: MainAxisAlignment.end, // 将按钮对齐到右侧
+          mainAxisAlignment: MainAxisAlignment.spaceBetween, // 使按钮分布在两侧
+
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Color(0xFF001F4C), // 按钮背景颜色
+                ),
+                onPressed: () {
+                  // Edit 操作的逻辑
+                },
+                child: const Text('Edit'), // “Edit”按钮文本
+              ),
             ),
-          );
-        },
-        separatorBuilder: (ctx, index) {
-          return Container(
-            height: 1,
-            color: Colors.grey,
-          );
-        },
-        itemCount: _materials.length,
-      ),
-      ElevatedButton(
-        onPressed: () {
-          setState(() {
-            _materials.add(_RecipeMaterialsModel(
-                TextEditingController(), TextEditingController()));
-          });
-        },
-        child: const Text('Add more ingredients'),
-      ),
-    ];
-  }
-
-  // 构建步骤输入列表
-  _buildStep() {
-    return [
-      ListView.separated(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (ctx, index) {
-          var data = _steps[index];
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: TextField(
-              controller: data,
-              decoration:
-                  InputDecoration(labelText: 'Step ${index + 1} Description'),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Color(0xFF001F4C), // 按钮背景颜色
+                ),
+                onPressed: () {
+                  setState(() {
+                    _materials.add(_RecipeMaterialsModel(
+                        TextEditingController(), TextEditingController()));
+                  });
+                },
+                child: const Text('Add more'), // “Add more”按钮文本
+              ),
             ),
-          );
-        },
-        separatorBuilder: (ctx, index) {
-          return Container(
-            height: 1,
-            color: Colors.grey,
-          );
-        },
-        itemCount: _steps.length,
-      ),
-      ElevatedButton(
-        onPressed: () {
-          setState(
-            () {
-              _steps.add(TextEditingController());
-            },
-          );
-        },
-        child: const Text('Add more steps'),
-      ),
-    ];
+          ],
+        ),
+      ],
+    );
   }
-
-// // 构建分类选择器的Widget
-//   _item2(
-//     BuildContext context,
-//   ) {
-//     return GestureDetector(
-//       behavior: HitTestBehavior.opaque,
-//       onTap: () {
-//         _showTabs(context);
-//       },
-//       child: Container(
-//         padding: const EdgeInsets.symmetric(vertical: 10),
-//         decoration: const BoxDecoration(
-//           border: Border(bottom: BorderSide(color: Colors.grey)),
-//         ),
-//         child: Row(
-//           children: [
-//             const Text("Category"), //分类
-//             Expanded(
-//               child: Text(
-//                 _classify == null ? "" : "${_classify?.name}",
-//                 textAlign: TextAlign.end,
-//               ),
-//             ),
-//             const Icon(Icons.keyboard_arrow_right)
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-
-// // 显示分类选择底部弹出菜单，并处理分类选择结果
-//   void _showTabs(BuildContext context) async {
-//     if (_list.isEmpty) {
-//       return;
-//     }
-//     var res = await showModalBottomSheet(
-//         context: context,
-//         builder: (ctx) {
-//           return Container(
-//             padding: const EdgeInsets.symmetric(horizontal: 15),
-//             color: Colors.white,
-//             height: 500,
-//             child: ListView.separated(
-//                 itemBuilder: (ctx, index) {
-//                   return GestureDetector(
-//                     onTap: () {
-//                       Navigator.of(context).pop(_list[index]);
-//                     },
-//                     behavior: HitTestBehavior.opaque,
-//                     child: Padding(
-//                       padding: const EdgeInsets.symmetric(vertical: 10),
-//                       child: Text(
-//                         _list[index].name,
-//                         style: TextStyle(
-//                           color: _classify?.code == _list[index].code
-//                               ? Colors.red
-//                               : Colors.black,
-//                         ),
-//                       ),
-//                     ),
-//                   );
-//                 },
-//                 separatorBuilder: (ctx, index) {
-//                   return Container(
-//                     height: 1,
-//                     color: Colors.grey,
-//                   );
-//                 },
-//                 itemCount: _list.length),
-//           );
-//         });
-//     if (res != null) {
-//       setState(() {
-//         _classify = res;
-//       });
-//     }
-//   }
 
 // 构建分类选择器的Widget
   Widget _buildCategorySelector() {
@@ -718,8 +837,8 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           child: Text(
             "Category:", // 分类标签文本
             style: TextStyle(
@@ -731,10 +850,14 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
         ),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: Row(
-            // children: _list.map((e) => _buildCategoryTab(context, e)).toList(),
-            children:
-                filteredList.map((e) => _buildCategoryTab(context, e)).toList(),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Row(
+              // children: _list.map((e) => _buildCategoryTab(context, e)).toList(),
+              children: filteredList
+                  .map((e) => _buildCategoryTab(context, e))
+                  .toList(),
+            ),
           ),
         ),
       ],
