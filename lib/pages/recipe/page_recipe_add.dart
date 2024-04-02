@@ -443,19 +443,18 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
             child: OutlinedButton(
               onPressed: () => _showStyle(context),
               style: OutlinedButton.styleFrom(
-                backgroundColor: Colors.black45,
+                backgroundColor: Color(0xFF001F4C),
+                padding: EdgeInsets.symmetric(
+                    horizontal: 4, vertical: 8), // 减少padding
+                textStyle: TextStyle(fontSize: 10), // 调整字体大小
               ),
               child: const Text('Change Cover Image',
-                  style: TextStyle(color: Colors.white)),
+                  style: TextStyle(color: Colors.white, fontSize: 10)),
             ),
           ),
         ],
       );
     } else {
-      // return OutlinedButton(
-      //   onPressed: () => _showStyle(context),
-      //   child: const Text('Add Cover Image'),
-      // );
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
