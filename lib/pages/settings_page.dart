@@ -70,11 +70,15 @@ class _SettingsPageState extends State<SettingsPage> {
           children: [
             Text('Signed in as: ' + user.email!),
             MaterialButton(
-                onPressed: () {
-                  FirebaseAuth.instance.signOut();
-                },
-                color: Color.fromARGB(197, 143, 180, 193),
-                child: const Text('Sign out')),
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+              },
+              color: Color(0xFF001F4C),
+              child: const Text(
+                'Sign out',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
           ],
         ),
       ),

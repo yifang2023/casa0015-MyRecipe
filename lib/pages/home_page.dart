@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:MyRecipe/components/bottom_nav_bar.dart';
 import 'package:MyRecipe/pages/recipe/recipe_page.dart';
 import 'package:MyRecipe/pages/settings_page.dart';
-import 'package:MyRecipe/pages/restaurant_page.dart';
 
 // home page
 class HomePage extends StatefulWidget {
@@ -31,8 +30,6 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _pages = [
     // recipe page
     const RecipePage(),
-    // restaurant page
-    const RestaurantPage(),
     // settings page
     const SettingsPage(),
   ];
@@ -48,25 +45,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             Text('Signed in as: ' + user.email!),
-//             MaterialButton(
-//                 onPressed: () {
-//                   FirebaseAuth.instance.signOut();
-//                 },
-//                 color: Color.fromARGB(197, 143, 180, 193),
-//                 child: const Text('Sign out')),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-

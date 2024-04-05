@@ -20,3 +20,4 @@ class _RecipeMaterialsModel {
   // 'left' 代表材料名称的控制器，'right' 代表材料数量的控制器。
   _RecipeMaterialsModel(this.left, this.right);
 }
+

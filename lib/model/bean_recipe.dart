@@ -3,13 +3,21 @@ class RecipeBean {
   late String id;
   late String coverUrl;
   late String introduce;
-  late String duration;
+  late int hr;
+  late int min;
   late String classifyName;
   late String classifyCode;
   late String userId;
   late int time;
   late List<RecipeMaterialsBean> materials;
   late List<RecipeStepBean> steps;
+
+  String getDuration() {
+    if (hr == 0) {
+      return "${min}min";
+    }
+    return "${hr}hr${min}min";
+  }
 
   RecipeBean(
       this.id,
@@ -18,7 +26,8 @@ class RecipeBean {
       this.introduce,
       this.classifyName,
       this.classifyCode,
-      this.duration,
+      this.hr,
+      this.min,
       this.materials,
       this.steps,
       this.time,
@@ -30,7 +39,8 @@ class RecipeBean {
     introduce = json?['introduce'] ?? "";
     classifyName = json?['clas sifyName'] ?? "";
     classifyCode = json?['classifyCode'] ?? "";
-    duration = json?['duration'] ?? "";
+    hr = json?['hr'] ?? "";
+    min = json?['min'] ?? "";
 
     materials = <RecipeMaterialsBean>[];
     if (json?['materials'] != null) {
@@ -57,7 +67,8 @@ class RecipeBean {
     data['introduce'] = introduce;
     data['classifyCode'] = classifyCode;
     data['classifyName'] = classifyName;
-    data['duration'] = duration;
+    data['min'] = min;
+    data['hr'] = hr;
     data['time'] = time;
     data['userId'] = userId;
     data['materials'] = materials.map((e) => e.toJson()).toList();
@@ -67,7 +78,7 @@ class RecipeBean {
 
   @override
   String toString() {
-    return 'RecipeBean{title: $title, id: $id, coverUrl: $coverUrl, introduce: $introduce, duration: $duration, classifyName: $classifyName, classifyCode: $classifyCode, userId: $userId, time: $time, materials: $materials, steps: $steps}';
+    return 'RecipeBean{title: $title, id: $id, coverUrl: $coverUrl, introduce: $introduce, hr: $hr, classifyName: $classifyName, classifyCode: $classifyCode, userId: $userId, time: $time, materials: $materials, steps: $steps}';
   }
 }
 

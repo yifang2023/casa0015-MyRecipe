@@ -1,22 +1,57 @@
+import 'package:MyRecipe/config/config_documents.dart';
+import 'package:MyRecipe/model/bean_recipe.dart';
+import 'package:MyRecipe/pages/recipe/page_recipe_add.dart';
+import 'package:MyRecipe/utils/utils_logger.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
+class RecipeDetailPage extends StatefulWidget {
+  final RecipeBean data;
 
-class RecipeDetailPage extends StatelessWidget {
+  const RecipeDetailPage({super.key, required this.data});
+
+  @override
+  State<RecipeDetailPage> createState() => _RecipeDetailPageState();
+}
+
+class _RecipeDetailPageState extends State<RecipeDetailPage> {
+  late RecipeBean _data;
+
+  @override
+  void initState() {
+    _data = widget.data;
+    super.initState();
+  }
+
+  Future<void> _refreshDetail() async {
+    try {
+      var doc = await FirebaseFirestore.instance
+          .collection(DocumentsConfig.recipe)
+          .doc(_data.id)
+          .get();
+      _data = RecipeBean.fromJson(doc.data(), doc.id);
+      setState(() {});
+    } catch (e) {
+      LoggerUtils.e(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFE9EFF9),
+        backgroundColor: const Color(0xFFE9EFF9),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.of(context).pop(); // 返回上一个页面
           },
         ),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.more_vert),
+            icon: const Icon(Icons.more_vert),
             onPressed: () {
               _showPopupMenu(context);
             },
@@ -31,20 +66,20 @@ class RecipeDetailPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: Text(
-                'Chicken Curry',
-                style: TextStyle(
+                _data.title,
+                style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-            SizedBox(height: 15),
-            Text(
+            const SizedBox(height: 15),
+            const Text(
               'Introduction:',
               style: TextStyle(
                   color: Color(0xFF0059D8), fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Container(
               padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
@@ -54,41 +89,41 @@ class RecipeDetailPage extends StatelessWidget {
                   BoxShadow(
                     color: Colors.grey.withOpacity(0.3),
                     blurRadius: 6,
-                    offset: Offset(0, 2),
+                    offset: const Offset(0, 2),
                   ),
                 ],
               ),
-              child: Text('好好吃呢'),
+              child: Text(_data.introduce),
             ),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               'Duration:',
               style: TextStyle(
                   color: Color(0xFF0059D8), fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Row(
               children: [
-                Icon(Icons.timer, color: Color(0xFF0059D8)),
-                SizedBox(width: 8),
-                Text('1hr 20min'),
+                const Icon(Icons.timer, color: Color(0xFF0059D8)),
+                const SizedBox(width: 8),
+                Text(_data.getDuration()),
               ],
             ),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               'Ingredients:',
               style: TextStyle(
                   color: Color(0xFF0059D8), fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             ..._buildIngredientList(),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               'Recipe:',
               style: TextStyle(
                   color: Color(0xFF0059D8), fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             ..._buildRecipeSteps(),
           ],
         ),
@@ -96,13 +131,12 @@ class RecipeDetailPage extends StatelessWidget {
     );
   }
 
-// 顶部菜单弹窗
   void _showPopupMenu(BuildContext context) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return Container(
-          padding: EdgeInsets.only(top: 40), // 顶部增加一些padding
+          padding: const EdgeInsets.only(top: 40), // 顶部增加一些padding
           height: 180, // 增加弹窗的高度以适应顶部的padding
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start, // 调整为从顶部开始
@@ -113,16 +147,17 @@ class RecipeDetailPage extends StatelessWidget {
                   InkWell(
                     onTap: () {
                       // 编辑操作
+                      _edit(context);
                     },
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Container(
-                          padding: EdgeInsets.all(8), // 图标内部的padding
+                          padding: const EdgeInsets.all(8), // 图标内部的padding
                           decoration: BoxDecoration(
                             shape: BoxShape.circle, // 使容器成为圆形
                             border: Border.all(
-                              color: Color(0xFF001F4C), // 边框颜色为深蓝色
+                              color: const Color(0xFF001F4C), // 边框颜色为深蓝色
                             ),
                           ),
                           child: const Icon(
@@ -130,7 +165,8 @@ class RecipeDetailPage extends StatelessWidget {
                             color: Color(0xFF001F4C),
                           ),
                         ),
-                        SizedBox(height: 8), // 增加图标和文字之间的间距（8像素）（可根据需要调整）(
+                        const SizedBox(height: 8),
+                        // 增加图标和文字之间的间距（8像素）（可根据需要调整）(
                         const Text(
                           'Edit',
                           style: TextStyle(
@@ -143,16 +179,17 @@ class RecipeDetailPage extends StatelessWidget {
                   InkWell(
                     onTap: () {
                       // 删除操作
+                      _deletePop(context);
                     },
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Container(
-                          padding: EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: Color(0xFF001F4C),
+                              color: const Color(0xFF001F4C),
                             ),
                           ),
                           child: const Icon(
@@ -160,7 +197,7 @@ class RecipeDetailPage extends StatelessWidget {
                             color: Color(0xFF001F4C),
                           ),
                         ),
-                        SizedBox(height: 8), // 增加图标和文字之间的间距
+                        const SizedBox(height: 8), // 增加图标和文字之间的间距
                         const Text('Delete',
                             style: TextStyle(color: Color(0xFF001F4C))),
                       ],
@@ -168,15 +205,16 @@ class RecipeDetailPage extends StatelessWidget {
                   ),
                 ],
               ),
-              Spacer(),
+              const Spacer(),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,
-                  backgroundColor: Color(0xFF001F4C), // 设置按钮背景颜色
-                  minimumSize: Size(300, 24), // 指定按钮的最小尺寸，这里设置宽度为200像素
-                  padding: EdgeInsets.symmetric(vertical: 12), // 设置按钮的垂直内边距
+                  backgroundColor: const Color(0xFF001F4C), // 设置按钮背景颜色
+                  minimumSize: const Size(300, 24), // 指定按钮的最小尺寸，这里设置宽度为200像素
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12), // 设置按钮的垂直内边距
                 ),
-                child: Text('Cancel', style: TextStyle(fontSize: 16)),
+                child: const Text('Cancel', style: TextStyle(fontSize: 16)),
                 onPressed: () {
                   Navigator.pop(context); // 关闭弹窗
                 },
@@ -190,12 +228,8 @@ class RecipeDetailPage extends StatelessWidget {
 
   List<Widget> _buildIngredientList() {
     // Dummy ingredients data
-    List<Map<String, dynamic>> ingredients = [
-      {"name": "鸡肉", "quantity": "500g"},
-      {"name": "土豆", "quantity": "2个"}
-    ];
 
-    return ingredients
+    return _data.materials
         .map(
           (ingredient) => Container(
             margin: const EdgeInsets.only(bottom: 8.0),
@@ -208,15 +242,15 @@ class RecipeDetailPage extends StatelessWidget {
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.3),
                   blurRadius: 6,
-                  offset: Offset(0, 2),
+                  offset: const Offset(0, 2),
                 ),
               ],
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(ingredient['name']),
-                Text(ingredient['quantity']),
+                Text(ingredient.name),
+                Text(ingredient.dosage),
               ],
             ),
           ),
@@ -225,30 +259,80 @@ class RecipeDetailPage extends StatelessWidget {
   }
 
   List<Widget> _buildRecipeSteps() {
-    // Dummy steps data
-    List<String> steps = ["摘肉", "下锅"];
+    List<Widget> widgets = [];
 
-    return steps
-        .asMap()
-        .entries
-        .map(
-          (step) => Container(
-            margin: const EdgeInsets.only(bottom: 8.0),
-            padding: const EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.3),
-                  blurRadius: 6,
-                  offset: Offset(0, 2),
-                ),
-              ],
+    for (var i = 0; i < _data.steps.length; i++) {
+      widgets.add(Container(
+        margin: const EdgeInsets.only(bottom: 8.0),
+        padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
             ),
-            child: Text('Step ${step.key + 1} ${step.value}'),
-          ),
-        )
-        .toList();
+          ],
+        ),
+        child: Text('Step ${i + 1} ${_data.steps[i].desc}'),
+      ));
+    }
+    return widgets;
+  }
+
+  void _edit(BuildContext context) async {
+    var res = await Navigator.of(context).pushReplacement(
+      CupertinoPageRoute(
+        builder: (ctx) {
+          return RecipeAddPage(data: _data);
+        },
+      ),
+    );
+    if (res != null) {
+      await _refreshDetail();
+    }
+  }
+
+  void _deletePop(BuildContext context) {
+    Navigator.of(context).pop();
+    showDialog<bool?>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Text('确定删除 ${_data.title}'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('确定'),
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+              ),
+              TextButton(
+                child: const Text('取消'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        }).then((value) {
+      if (value != null) {
+        _deleteData(context);
+      }
+    });
+  }
+
+  void _deleteData(BuildContext context) {
+    FirebaseFirestore.instance
+        .collection(DocumentsConfig.recipe)
+        .doc(_data.id)
+        .delete()
+        .then((value) {
+      Navigator.of(context).pop(true);
+    }).catchError((e) {
+      LoggerUtils.e(e);
+    });
   }
 }

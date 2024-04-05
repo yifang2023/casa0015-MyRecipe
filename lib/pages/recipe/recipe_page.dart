@@ -1,12 +1,12 @@
 import 'package:MyRecipe/config/config_documents.dart';
 import 'package:MyRecipe/model/bean_recipe.dart';
 import 'package:MyRecipe/pages/recipe/page_recipe_add.dart';
+import 'package:MyRecipe/pages/recipe/recipe_details_page.dart';
 import 'package:MyRecipe/utils/utils_logger.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
 part 'recipe_card.dart';
 
 class RecipePage extends StatefulWidget {
@@ -21,9 +21,13 @@ class _RecipePageState extends State<RecipePage>
   final TextEditingController _searchController = TextEditingController();
   final List<RecipeClassifyBean> _tabs = [];
   final List<RecipeBean> _dataList = [];
+  final List<RecipeBean> _allDataList = [];
+  final Map<String, List<RecipeBean>> _dataMap = {};
   int _selectedIndex = 0;
 
   String _searchKey = "";
+
+  bool _isloading = true;
 
   @override
   void initState() {
@@ -44,7 +48,7 @@ class _RecipePageState extends State<RecipePage>
         LoggerUtils.i(recipeClassifyBean);
         _tabs.add(recipeClassifyBean);
       }
-      setState(() {});
+      await _refreshList();
     } catch (e) {
       LoggerUtils.e(e);
     }
@@ -54,27 +58,45 @@ class _RecipePageState extends State<RecipePage>
     try {
       var collection =
           FirebaseFirestore.instance.collection(DocumentsConfig.recipe);
-      var elementAtOrNull = _tabs.elementAtOrNull(_selectedIndex);
-      if (elementAtOrNull != null) {
-        collection.where("classifyCode", isEqualTo: elementAtOrNull.code);
-      }
       var res = await collection.orderBy("time", descending: true).get();
-      _dataList.clear();
+      _dataMap.clear();
+      _allDataList.clear();
       for (var doc in res.docs) {
-        var recipeClassifyBean = RecipeBean.fromJson(doc.data(), doc.id);
-        if (_searchKey.isNotEmpty) {
-          if (recipeClassifyBean.title.contains(_searchKey)) {
-            _dataList.add(recipeClassifyBean);
-          }
+        var recipeBean = RecipeBean.fromJson(doc.data(), doc.id);
+        _allDataList.add(recipeBean);
+        var dataMap = _dataMap[recipeBean.classifyCode];
+        if (dataMap == null) {
+          var temp = <RecipeBean>[];
+          temp.add(recipeBean);
+          _dataMap[recipeBean.classifyCode] = temp;
         } else {
-          _dataList.add(recipeClassifyBean);
+          dataMap.add(recipeBean);
+          _dataMap[recipeBean.classifyCode] = dataMap;
         }
       }
       LoggerUtils.i(_dataList);
-      setState(() {});
+      _changeData();
     } catch (e) {
       LoggerUtils.e(e);
+    } finally {
+      _isloading = false;
     }
+  }
+
+  _changeData() {
+    _dataList.clear();
+    var elementAtOrNull = _tabs.elementAtOrNull(_selectedIndex);
+    if (elementAtOrNull != null) {
+      var dataMap = _dataMap[elementAtOrNull.code];
+      if (dataMap != null) {
+        _dataList.addAll(dataMap);
+      } else {
+        if (elementAtOrNull.code == "0") {
+          _dataList.addAll(_allDataList);
+        }
+      }
+    }
+    setState(() {});
   }
 
   @override
@@ -97,39 +119,14 @@ class _RecipePageState extends State<RecipePage>
     );
   }
 
-  // Widget _buildHeader(BuildContext context) {
-  //   return SafeArea(
-  //     child: SizedBox(
-  //       height: 44,
-  //       child: Stack(
-  //         children: [
-  //           const Center(
-  //             child: Text(
-  //               'Recipe Page',
-  //               style: TextStyle(fontSize: 18),
-  //             ),
-  //           ),
-  //           Align(
-  //             alignment: Alignment.centerRight,
-  //             child: IconButton(
-  //               onPressed: () {
-  //                 _add(context);
-  //               },
-  //               icon: const Icon(Icons.add),
-  //             ),
-  //           )
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
   Widget _buildHeader(BuildContext context) {
     return AppBar(
-      backgroundColor: Color(0xFFE9EFF9),
-      elevation: 0, // Remove shadow if needed
-      centerTitle: true, // Center the title
-      title: Text(
+      backgroundColor: const Color(0xFFE9EFF9),
+      elevation: 0,
+      // Remove shadow if needed
+      centerTitle: true,
+      // Center the title
+      title: const Text(
         'My Recipe',
         style: TextStyle(
           fontSize: 20,
@@ -143,7 +140,7 @@ class _RecipePageState extends State<RecipePage>
             _add(context);
           },
           icon: const Icon(Icons.add_box_rounded),
-          color: Color(0xFF001F4C),
+          color: const Color(0xFF001F4C),
         ),
       ],
     );
@@ -154,7 +151,7 @@ class _RecipePageState extends State<RecipePage>
   /// https://firebase.google.com/docs/firestore/quickstart?hl=zh-cn#add_data
   ///
   void _add(BuildContext context) async {
-    Navigator.of(context).push(CupertinoPageRoute(builder: (ctx) {
+    await Navigator.of(context).push(CupertinoPageRoute(builder: (ctx) {
       return const RecipeAddPage();
     }));
   }
@@ -164,7 +161,8 @@ class _RecipePageState extends State<RecipePage>
       margin: const EdgeInsets.fromLTRB(20, 25, 20, 10),
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       decoration: BoxDecoration(
-        color: Color(0xFFF2F4FB), // Set the background color of the search box
+        color: const Color(0xFFF2F4FB),
+        // Set the background color of the search box
         borderRadius: BorderRadius.circular(18),
       ),
       child: Row(
@@ -177,7 +175,7 @@ class _RecipePageState extends State<RecipePage>
           Expanded(
             child: TextField(
               controller: _searchController,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.black,
               ),
               onSubmitted: (content) {
@@ -200,11 +198,32 @@ class _RecipePageState extends State<RecipePage>
   }
 
   void _search(BuildContext context, String content) async {
-    setState(() {
-      _searchKey = content;
-    });
+    _searchKey = content;
+    List<RecipeBean> temp = [];
+    _dataList.clear();
+    var dataMap = _dataMap[_tabs.elementAtOrNull(_selectedIndex)];
+    if (dataMap != null) {
+      if (_searchKey.isNotEmpty) {
+        for (var value in dataMap) {
+          if (value.title.contains(_searchKey)) {
+            temp.add(value);
+          } else {
+            // ingredients
+            for (var item in value.materials) {
+              if (item.name.contains(_searchKey)) {
+                temp.add(value);
+                break;
+              }
+            }
+          }
+        }
+      } else {
+        temp.addAll(dataMap);
+      }
+    }
+    _dataList.addAll(temp);
 
-    await _refreshList();
+    setState(() {});
   }
 
   Widget _buildCategory(BuildContext context) {
@@ -221,31 +240,6 @@ class _RecipePageState extends State<RecipePage>
     );
   }
 
-  // Widget _buildCategoryItem(int index) {
-  //   return GestureDetector(
-  //     onTap: () {
-  //       _changeTab(index);
-  //     },
-  //     behavior: HitTestBehavior.opaque,
-  //     child: Container(
-  //       alignment: Alignment.center,
-  //       padding: const EdgeInsets.symmetric(horizontal: 15),
-  //       margin: const EdgeInsets.only(left: 20),
-  //       decoration: BoxDecoration(
-  //         color: _selectedIndex == index ? Colors.blue[50] : Colors.transparent,
-  //         borderRadius: BorderRadius.circular(8),
-  //       ),
-  //       child: Text(
-  //         _tabs[index].name,
-  //         style: TextStyle(
-  //           fontWeight: FontWeight.bold,
-  //           color: Colors.blue[500],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
   Widget _buildCategoryItem(int index) {
     bool isSelected = _selectedIndex == index; // Check if the tab is selected
     return GestureDetector(
@@ -258,9 +252,8 @@ class _RecipePageState extends State<RecipePage>
         padding: const EdgeInsets.symmetric(horizontal: 15),
         margin: const EdgeInsets.only(left: 20),
         decoration: BoxDecoration(
-          color: isSelected
-              ? Color(0xFF001F4C)
-              : Color(0xFFF2F4FB), // Change background color based on selection
+          color: isSelected ? const Color(0xFF001F4C) : const Color(0xFFF2F4FB),
+          // Change background color based on selection
           borderRadius: BorderRadius.circular(8),
         ),
         child: Text(
@@ -280,19 +273,17 @@ class _RecipePageState extends State<RecipePage>
     if (index == _selectedIndex) {
       return;
     }
-    setState(() {
-      _selectedIndex = index;
-    });
+    _selectedIndex = index;
 
-    await _refreshList();
+    _changeData();
   }
 
   Widget _buildContent(BuildContext context) {
-    // if (_dataList.isEmpty) {
-    //   return const Center(
-    //     child: Text("no data"),
-    //   );
-    // }
+    if (_isloading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
     if (_dataList.isEmpty) {
       return Center(
         child: Column(
@@ -303,7 +294,8 @@ class _RecipePageState extends State<RecipePage>
               width: 200, // Set the image width to fit your design
               height: 200, // Set the image height to fit your design
             ),
-            SizedBox(height: 20), // Provide some spacing between image and text
+            const SizedBox(height: 20),
+            // Provide some spacing between image and text
             const Text(
               'No recipes yet. Start creating your recipe now!',
               textAlign: TextAlign.center,
@@ -313,20 +305,21 @@ class _RecipePageState extends State<RecipePage>
                 fontSize: 16, // Adjust the font size as needed
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
-            ), // Provide some spacing between text and button
+            ),
+            // Provide some spacing between text and button
             ElevatedButton(
               onPressed: () {
                 // Add your onPressed function here
                 _add(context);
               },
-              child: const Text('Add new recipe'),
               style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,
-                  backgroundColor:
-                      Color(0xFF001F4C) // Set the text color for the button
+                  backgroundColor: const Color(
+                      0xFF001F4C) // Set the text color for the button
                   ),
+              child: const Text('Add new recipe'),
             ),
           ],
         ),
@@ -357,7 +350,7 @@ class _RecipePageState extends State<RecipePage>
     Navigator.of(context).push(
       CupertinoPageRoute(
         builder: (ctx) {
-          return RecipeAddPage(
+          return RecipeDetailPage(
             data: data,
           );
         },
