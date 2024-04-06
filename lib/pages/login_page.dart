@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      backgroundColor: Colors.grey[100],
       body: Center(
         child: SingleChildScrollView(
           // make the content scrollable
@@ -47,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               // Our Logo
               Image.asset(
-                'asset/MyRecipe_logo.png',
+                'asset/MyRecipe.png',
                 width: 150,
               ),
               const SizedBox(height: 50),
