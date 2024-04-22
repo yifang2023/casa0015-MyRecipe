@@ -1,4 +1,5 @@
 import 'package:MyRecipe/auth/auth_page.dart';
+import 'package:MyRecipe/config/config_documents.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:MyRecipe/pages/login_page.dart';
@@ -17,6 +18,7 @@ class MainPage extends StatelessWidget {
         builder: (context, snapshot) {
           print(snapshot.data);
           if (snapshot.hasData) {
+            DocumentsConfig.setUserId(snapshot.data?.uid);
             return HomePage();
           } else {
             return AuthPage();

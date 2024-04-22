@@ -417,11 +417,43 @@ class _RecipePageState extends State<RecipePage>
     }
   }
 
+  // Future<void> _refreshList() async {
+  //   try {
+  //     var collection =
+  //         FirebaseFirestore.instance.collection(DocumentsConfig.recipe);
+  //     var res = await collection.orderBy("time", descending: true).get();
+  //     _dataMap.clear();
+  //     List<RecipeBean> all = [];
+  //     for (var doc in res.docs) {
+  //       var recipeBean = RecipeBean.fromJson(doc.data(), doc.id);
+  //       all.add(recipeBean);
+  //       var dataMap = _dataMap[recipeBean.classifyCode];
+  //       if (dataMap == null) {
+  //         var temp = <RecipeBean>[];
+  //         temp.add(recipeBean);
+  //         _dataMap[recipeBean.classifyCode] = temp;
+  //       } else {
+  //         dataMap.add(recipeBean);
+  //         _dataMap[recipeBean.classifyCode] = dataMap;
+  //       }
+  //     }
+  //     _dataMap['0'] = all;
+  //     _isLoading = false;
+  //     _changeData();
+  //   } catch (e) {
+  //     LoggerUtils.e(e);
+  //     _isLoading = false;
+  //     setState(() {});
+  //   }
+  // }
   Future<void> _refreshList() async {
     try {
-      var collection =
-          FirebaseFirestore.instance.collection(DocumentsConfig.recipe);
-      var res = await collection.orderBy("time", descending: true).get();
+      var res = await FirebaseFirestore.instance
+          .collection(DocumentsConfig.recipe)
+          .where("userId", isEqualTo: DocumentsConfig.userId)
+          .orderBy("time", descending: true)
+          .get();
+
       _dataMap.clear();
       List<RecipeBean> all = [];
       for (var doc in res.docs) {
