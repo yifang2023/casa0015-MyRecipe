@@ -265,7 +265,7 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
         width: double
             .infinity, // Ensures the container takes full width of the screen
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(140, 20, 140, 20),
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
               foregroundColor: const Color(0xFF001F4C),
@@ -276,7 +276,15 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            child: const Text('Publish'),
+            child: const Text(
+              'Publish',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Color(0xFF001F4C),
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             onPressed: () {
               _submitData(context);
             },
