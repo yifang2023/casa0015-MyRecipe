@@ -21,7 +21,7 @@ class RecipeCard extends StatelessWidget {
                 top: Radius.circular(12)), // 图片顶部圆角。
             child: Image.network(
               data.coverUrl,
-              height: 100, // 图片高度。
+              height: 130, // 图片高度。
               width: double.infinity, // 图片宽度填满卡片。
               fit: BoxFit.cover,
             ),
