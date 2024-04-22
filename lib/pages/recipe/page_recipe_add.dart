@@ -5,10 +5,12 @@ import 'package:MyRecipe/model/bean_recipe.dart';
 import 'package:MyRecipe/pages/recipe/edit/edit_ingredients_page.dart';
 import 'package:MyRecipe/pages/recipe/edit/edit_recipe_page.dart';
 import 'package:MyRecipe/utils/utils_logger.dart';
+import 'package:MyRecipe/utils/utils_toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 
 // 引入一个局部文件，该文件定义了添加菜谱时需要的模型
@@ -64,21 +66,26 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
   // 如果检查通过，则构造一个新的RecipeBean对象，并根据是新增还是更新操作将数据提交到数据库
   void _submitData(BuildContext context) {
     if (_coverUrl.isEmpty) {
+      ToastUtils.show("Please select cover image");
       return;
     }
     var title = _titleTextEditingController.text;
     if (title.isEmpty) {
+      ToastUtils.show("Please input title");
       return;
     }
     var introduce = _introduceTextEditingController.text;
     if (introduce.isEmpty) {
+      ToastUtils.show("Please input introduction");
       return;
     }
     var duration = _durationValueNotifier.value;
     if (duration.inMinutes == 0) {
+      ToastUtils.show("Please select duration");
       return;
     }
     if (_classify == null) {
+      ToastUtils.show("Please select category");
       return;
     }
     var classifyName = _classify?.name ?? "";
@@ -91,6 +98,7 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
       }
     }
     if (steps.isEmpty) {
+      ToastUtils.show("Please input steps");
       return;
     }
 
@@ -104,6 +112,7 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
       }
     }
     if (materials.isEmpty) {
+      ToastUtils.show("Please input ingredients");
       return;
     }
     var tempData = widget.data?.id;
@@ -180,6 +189,7 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[50],
       appBar: AppBar(
         title: const Text(
           'Add Recipe',
@@ -251,23 +261,26 @@ class _RecipeAddPageState extends State<RecipeAddPage> {
           ),
         ],
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.fromLTRB(
-            140, 20, 140, 20), // Increase left and right padding
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            foregroundColor: const Color(0xFF001F4C),
-            backgroundColor: const Color(0xFFCFE4FF),
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-            textStyle: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+      bottomNavigationBar: Container(
+        width: double
+            .infinity, // Ensures the container takes full width of the screen
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(140, 20, 140, 20),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              foregroundColor: const Color(0xFF001F4C),
+              backgroundColor: const Color(0xFFCFE4FF),
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              textStyle: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
+            child: const Text('Publish'),
+            onPressed: () {
+              _submitData(context);
+            },
           ),
-          child: const Text('Publish'),
-          onPressed: () {
-            _submitData(context);
-          },
         ),
       ),
     );

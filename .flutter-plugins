@@ -15,6 +15,7 @@ firebase_messaging_web=/Users/ff/.pub-cache/hosted/pub.dev/firebase_messaging_we
 firebase_storage=/Users/ff/.pub-cache/hosted/pub.dev/firebase_storage-11.7.1/
 firebase_storage_web=/Users/ff/.pub-cache/hosted/pub.dev/firebase_storage_web-3.9.1/
 flutter_plugin_android_lifecycle=/Users/ff/.pub-cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.19/
+fluttertoast=/Users/ff/.pub-cache/hosted/pub.dev/fluttertoast-8.2.5/
 image_picker=/Users/ff/.pub-cache/hosted/pub.dev/image_picker-1.1.0/
 image_picker_android=/Users/ff/.pub-cache/hosted/pub.dev/image_picker_android-0.8.10/
 image_picker_for_web=/Users/ff/.pub-cache/hosted/pub.dev/image_picker_for_web-3.0.4/

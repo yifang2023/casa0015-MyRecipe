@@ -22,6 +22,7 @@ class _EditRecipePapgeState extends State<EditRecipePapge> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[50],
       appBar: AppBar(
         title: const Text(
           'Change Recipe',
@@ -50,7 +51,7 @@ class _EditRecipePapgeState extends State<EditRecipePapge> {
               child: Container(
                 padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
                 decoration: BoxDecoration(
-                  color: Colors.blueGrey.shade500,
+                  color: Color(0xFF001F4C),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Text(
