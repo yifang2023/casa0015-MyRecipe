@@ -47,7 +47,7 @@ class RecipeCard extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 100, bottom: 8.0),
+            padding: const EdgeInsets.only(left: 80, bottom: 8.0),
             child: Text(
               duration,
               style: TextStyle(

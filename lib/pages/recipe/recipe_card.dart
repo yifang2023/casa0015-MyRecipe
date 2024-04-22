@@ -19,19 +19,19 @@ class RecipeCard extends StatelessWidget {
           ClipRRect(
             borderRadius: const BorderRadius.vertical(
                 top: Radius.circular(12)), // 图片顶部圆角。
-            // child: Image.network(
-            //   data.coverUrl,
-            //   height: 160, // 图片高度。
-            //   width: double.infinity, // 图片宽度填满卡片。
-            //   fit: BoxFit.cover,
-            // ),
-            child: Expanded(
-              child: Image.network(
-                data.coverUrl,
-                fit: BoxFit
-                    .cover, // Image will cover the entire space of the container.
-              ),
+            child: Image.network(
+              data.coverUrl,
+              height: 160, // 图片高度。
+              width: double.infinity, // 图片宽度填满卡片。
+              fit: BoxFit.cover,
             ),
+            // child: Expanded(
+            //   child: Image.network(
+            //     data.coverUrl,
+            //     fit: BoxFit
+            //         .cover, // Image will cover the entire space of the container.
+            //   ),
+            // ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
