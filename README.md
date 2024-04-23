@@ -1,26 +1,23 @@
 # My Recipe
 
-This is the Final assessment template for CASA0014 - Please use this template and edit the relevant sections to personalise.
-This section has a short introduction to what the application is
+"My Recipe" is a mobile application designed for cooking enthusiasts who cherish the art of crafting and sharing delicious meals. It serves as a personal digital cookbook that allows users to create, store, and manage their own recipes with ease. At its core, "My Recipe" simplifies the cooking process by organizing recipes into a streamlined, user-friendly interface.
+
+With the ability to upload photos directly using the smartphone's camera, users can visually document their culinary creations, making it easier to follow along or share visual tips with others. The app supports search functionality, enabling users to quickly find recipes by title or ingredients, turning a scattered collection of dishes into an easily navigable repository.
 
 ## Landing Page
-https://yifang2023.github.io/casa0015-MyRecipe/
+[https://myrecipemange.framer.website/]
 
-## Use this README File 
+## Screen Shots and Core Features
 
-Use this section to show us what your Mobile App is about.   Include a Screenshot to the App, link to the various frameworks you've used. Include your presentation video here that shows off your Mobile App.   Emojis are also fun to include 📱 😄
+### Sign In, Sign Up, Reset Password
+![avatar](/home/picture/1.png) 类似
 
-Look at some other Flutter Apps online and see how they use there README File.  Good examples are:
-
-- https://github.com/miickel/flutter_particle_clock
-- https://github.com/Tarikul711/flutter-food-delivery-app-ui    
-- https://github.com/mohak1283/Instagram-Clone
+### Add, Edit, Delete Recipe Page
 
 
-## Include A Section That Tells Developers How To Install The App
+### Recipe categorization
 
-Include a section that gives intructions on how to install the app or run it in Flutter.  What versions of the plugins are you assuming?  Maybe define a licence
 
-##  Contact Details
+### Search Recipe
 
-Having Contact Details is also good as it shows people how to get in contact with you if they'd like to contribute to the app. 
+
