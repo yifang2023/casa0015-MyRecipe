@@ -11,21 +11,29 @@ With the ability to upload photos directly using the smartphone's camera, users 
 
 ### Sign In, Sign Up, Reset Password
 
-![alt text](<asset/sign in.png>)
-![alt text](<asset/sign up.png>)
-![alt text](<asset/reset pwd.png>)
+<div style="display: flex; justify-content: space-around;">
+  <img src="asset/sign in.png" alt="Sign In" style="width: 30%;">
+  <img src="asset/sign up.png" alt="Sign Up" style="width: 30%;">
+  <img src="asset/reset pwd.png" alt="Reset Password" style="width: 30%;">
+</div>
 
 ### Recipe Add & Detail Page
 
-![alt text](<asset/add recipe.png>)
-![alt text](<asset/detail recipe.png>)
+<div style="display: flex; justify-content: space-around;">
+  <img src="asset/add recipe.png" alt="Add Recipe" style="width: 50%;">
+  <img src="asset/detail recipe.png" alt="Detail Recipe" style="width: 50%;">
+</div>
+
 
 ### Recipe Categorization
 
-![alt text](<asset/category.png>)
+<div style="width: 100%; display: flex; justify-content: center;">
+  <img src="asset/category.png" alt="Category" style="width: 100%; max-width: 1440px;">
+</div>
+
 
 ### Search Recipe
 
-![alt text](<asset/search.png>)
-
-
+<div style="width: 100%; display: flex; justify-content: center;">
+  <img src="asset/search.png" alt="Category" style="width: 100%; max-width: 1440px;">
+</div>
