@@ -10,14 +10,22 @@ With the ability to upload photos directly using the smartphone's camera, users 
 ## Screen Shots and Core Features
 
 ### Sign In, Sign Up, Reset Password
-![avatar](/home/picture/1.png) 类似
 
-### Add, Edit, Delete Recipe Page
+![alt text](<asset/sign in.png>)
+![alt text](<asset/sign up.png>)
+![alt text](<asset/reset pwd.png>)
 
+### Recipe Add & Detail Page
 
-### Recipe categorization
+![alt text](<asset/add recipe.png>)
+![alt text](<asset/detail recipe.png>)
 
+### Recipe Categorization
+
+![alt text](<asset/category.png>)
 
 ### Search Recipe
+
+![alt text](<asset/search.png>)
 
 
