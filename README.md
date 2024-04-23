@@ -34,4 +34,6 @@ With the ability to upload photos directly using the smartphone's camera, users 
 
 ### Search Recipe
 
-<img src="asset/home_screen.jpg" height="500em" />
+<div style="width: 30%; display: flex; justify-content: center;">
+  <img src="asset/search.png" alt="Category" style="width: 30%;">
+</div>
