@@ -20,15 +20,15 @@ With the ability to upload photos directly using the smartphone's camera, users 
 ### Recipe Add & Detail Page
 
 <div style="display: flex; justify-content: space-around;">
-  <img src="asset/add recipe.png" alt="Add Recipe" style="width: 50%;">
-  <img src="asset/detail recipe.png" alt="Detail Recipe" style="width: 50%;">
+  <img src="asset/add recipe.png" alt="Add Recipe" style="width: 30%;">
+  <img src="asset/detail recipe.png" alt="Detail Recipe" style="width: 30%;">
 </div>
 
 
 ### Recipe Categorization
 
-<div style="width: 100%; display: flex; justify-content: center;">
-  <img src="asset/category.png" alt="Category" style="width: 100%; max-width: 1440px;">
+<div style="width: 30%; display: flex; justify-content: center;">
+  <img src="asset/category.png" alt="Category" style="width: 30%;">
 </div>
 
 
