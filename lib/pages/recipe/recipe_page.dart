@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 
 part 'recipe_card.dart';
 
+// Recipe page
 class RecipePage extends StatefulWidget {
   const RecipePage({super.key});
 
@@ -23,9 +24,7 @@ class _RecipePageState extends State<RecipePage>
   final List<RecipeBean> _dataList = [];
   final Map<String, List<RecipeBean>> _dataMap = {};
   int _selectedIndex = 0;
-
   String _searchKey = "";
-
   bool _isLoading = true;
 
   @override
@@ -34,6 +33,7 @@ class _RecipePageState extends State<RecipePage>
     super.initState();
   }
 
+// Get recipe classification list
   void _getRecipeClassifyList() async {
     try {
       var res = await FirebaseFirestore.instance
@@ -53,6 +53,7 @@ class _RecipePageState extends State<RecipePage>
     }
   }
 
+// Refresh the list
   Future<void> _refreshList() async {
     try {
       var res = await FirebaseFirestore.instance
@@ -86,6 +87,7 @@ class _RecipePageState extends State<RecipePage>
     }
   }
 
+// Change data
   _changeData() {
     _dataList.clear();
     var elementAtOrNull = _tabs.elementAtOrNull(_selectedIndex);
@@ -98,6 +100,7 @@ class _RecipePageState extends State<RecipePage>
     setState(() {});
   }
 
+// Build the widget
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -121,6 +124,7 @@ class _RecipePageState extends State<RecipePage>
     );
   }
 
+// Build the header
   Widget _buildHeader(BuildContext context) {
     return AppBar(
       backgroundColor: const Color(0xFFE9EFF9),
@@ -149,7 +153,6 @@ class _RecipePageState extends State<RecipePage>
   }
 
   ///
-  /// 添加数据
   /// https://firebase.google.com/docs/firestore/quickstart?hl=zh-cn#add_data
   ///
   void _add(BuildContext context) async {
@@ -203,6 +206,7 @@ class _RecipePageState extends State<RecipePage>
     );
   }
 
+// Search
   void _search(BuildContext context, String content) async {
     _searchKey = content;
     List<RecipeBean> temp = [];
@@ -233,6 +237,7 @@ class _RecipePageState extends State<RecipePage>
     setState(() {});
   }
 
+// Build the category
   Widget _buildCategory(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15),
@@ -247,6 +252,7 @@ class _RecipePageState extends State<RecipePage>
     );
   }
 
+// Build the category item
   Widget _buildCategoryItem(int index) {
     bool isSelected = _selectedIndex == index; // Check if the tab is selected
     return GestureDetector(
@@ -276,6 +282,7 @@ class _RecipePageState extends State<RecipePage>
     );
   }
 
+// Change tab
   void _changeTab(int index) async {
     if (index == _selectedIndex) {
       return;
@@ -285,6 +292,7 @@ class _RecipePageState extends State<RecipePage>
     _changeData();
   }
 
+// Build the content
   Widget _buildContent(BuildContext context) {
     if (_isLoading) {
       return const Center(
@@ -307,7 +315,6 @@ class _RecipePageState extends State<RecipePage>
               'No recipes yet. Start creating your recipe now!',
               textAlign: TextAlign.center,
               style: TextStyle(
-                //设置字体颜色为灰色
                 color: Colors.grey,
                 fontSize: 16, // Adjust the font size as needed
               ),
@@ -353,6 +360,7 @@ class _RecipePageState extends State<RecipePage>
     );
   }
 
+// Jump to the detail page
   void _jumpDetail(BuildContext context, RecipeBean data) async {
     var res = await Navigator.of(context).push(
       CupertinoPageRoute(

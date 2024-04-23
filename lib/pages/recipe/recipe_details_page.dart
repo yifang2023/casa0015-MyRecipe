@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+// Recipe detail page
 class RecipeDetailPage extends StatefulWidget {
   final RecipeBean data;
 
@@ -25,6 +26,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     super.initState();
   }
 
+// Refresh the recipe details
   Future<void> _refreshDetail() async {
     try {
       var doc = await FirebaseFirestore.instance
@@ -38,6 +40,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     }
   }
 
+// Build the recipe details page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +50,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.of(context).pop(); // 返回上一个页面
+            Navigator.of(context).pop();
           },
         ),
         actions: <Widget>[
@@ -75,9 +78,9 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
               ),
             ),
             const SizedBox(height: 15),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: const Text(
+            const Padding(
+              padding: EdgeInsets.all(15.0),
+              child: Text(
                 'Introduction:',
                 style: TextStyle(
                     color: Color(0xFF0059D8),
@@ -95,13 +98,12 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                 color: const Color(0xFFF2F4FB), // Specified background color
                 borderRadius: BorderRadius.circular(12.0),
               ),
-              child: Text(
-                  _data.introduce), // Assuming you have a child text widget
+              child: Text(_data.introduce),
             ),
             const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: const Text(
+            const Padding(
+              padding: EdgeInsets.all(15.0),
+              child: Text(
                 'Duration:',
                 style: TextStyle(
                     color: Color(0xFF0059D8),
@@ -120,9 +122,9 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
               ),
             ),
             const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: const Text(
+            const Padding(
+              padding: EdgeInsets.all(15.0),
+              child: Text(
                 'Ingredients:',
                 style: TextStyle(
                   color: Color(0xFF0059D8),
@@ -133,9 +135,9 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
             ),
             ..._buildIngredientList(),
             const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: const Text(
+            const Padding(
+              padding: EdgeInsets.all(15.0),
+              child: Text(
                 'Recipe:',
                 style: TextStyle(
                   color: Color(0xFF0059D8),
@@ -151,33 +153,35 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     );
   }
 
+// Show the popup menu
   void _showPopupMenu(BuildContext context) async {
     var res = await showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return Container(
-          padding: const EdgeInsets.only(top: 40), // 顶部增加一些padding
-          height: 180, // 增加弹窗的高度以适应顶部的padding
+          padding: const EdgeInsets.only(top: 40),
+          height: 180,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start, // 调整为从顶部开始
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly, // 图标均匀分布
+                mainAxisAlignment:
+                    MainAxisAlignment.spaceEvenly, // Evenly space the two icons
                 children: [
                   InkWell(
                     onTap: () {
-                      // 编辑操作
+                      // Edit operation
                       Navigator.of(context).pop("edit");
                     },
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Container(
-                          padding: const EdgeInsets.all(8), // 图标内部的padding
+                          padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            shape: BoxShape.circle, // 使容器成为圆形
+                            shape: BoxShape.circle,
                             border: Border.all(
-                              color: const Color(0xFF001F4C), // 边框颜色为深蓝色
+                              color: const Color(0xFF001F4C),
                             ),
                           ),
                           child: const Icon(
@@ -186,7 +190,6 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        // 增加图标和文字之间的间距（8像素）（可根据需要调整）(
                         const Text(
                           'Edit',
                           style: TextStyle(
@@ -198,7 +201,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                   ),
                   InkWell(
                     onTap: () {
-                      // 删除操作
+                      // Delete operation
                       Navigator.of(context).pop("delete");
                     },
                     child: Column(
@@ -217,7 +220,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                             color: Color(0xFF001F4C),
                           ),
                         ),
-                        const SizedBox(height: 8), // 增加图标和文字之间的间距
+                        const SizedBox(height: 8),
                         const Text('Delete',
                             style: TextStyle(color: Color(0xFF001F4C))),
                       ],
@@ -229,14 +232,13 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,
-                  backgroundColor: const Color(0xFF001F4C), // 设置按钮背景颜色
-                  minimumSize: const Size(300, 24), // 指定按钮的最小尺寸，这里设置宽度为200像素
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12), // 设置按钮的垂直内边距
+                  backgroundColor: const Color(0xFF001F4C),
+                  minimumSize: const Size(300, 24),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
                 ),
                 child: const Text('Cancel', style: TextStyle(fontSize: 16)),
                 onPressed: () {
-                  Navigator.pop(context); // 关闭弹窗
+                  Navigator.pop(context); // Close the modal
                 },
               ),
             ],
@@ -253,6 +255,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     }
   }
 
+// Build the ingredient list
   List<Widget> _buildIngredientList() {
     return _data.materials
         .map(
@@ -272,7 +275,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(ingredient.name,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors
                             .black)), // Ensuring text color is explicitly set if needed
                 Text(ingredient.dosage, style: TextStyle(color: Colors.black)),
@@ -283,6 +286,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
         .toList();
   }
 
+// Build the recipe steps
   List<Widget> _buildRecipeSteps() {
     List<Widget> widgets = [];
     for (var i = 0; i < _data.steps.length; i++) {
@@ -298,15 +302,15 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
         ),
         child: RichText(
           text: TextSpan(
-            style: TextStyle(
-                fontSize: 16.0,
+            style: const TextStyle(
+                // fontSize: 16.0,
                 color: Colors.black), // Default text style for the description
             children: [
               TextSpan(
                 text: 'Step ${i + 1} ', // "Step X" text
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: const Color(0xFF0059D8), // Blue color for "Step X"
+                  color: Color(0xFF0059D8), // Blue color for "Step X"
                 ),
               ),
               TextSpan(
@@ -320,6 +324,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     return widgets;
   }
 
+// Edit the recipe, navigate to the recipe add page
   void _edit() async {
     if (!mounted) return;
     Navigator.of(context).pushReplacement(
@@ -331,6 +336,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     );
   }
 
+// Delete the recipe, show confirmation dialog
   void _deletePop() async {
     if (!mounted) return;
     var res = await showDialog<bool?>(
@@ -378,6 +384,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     }
   }
 
+// Delete the recipe data
   void _deleteData() async {
     try {
       await FirebaseFirestore.instance

@@ -1,14 +1,7 @@
-
-## How to create a PDF from Markdown
-When finished you should export to PDF using VSCode and MarkdownPDF Extension. Make sure you select no headers and no footers in the
-extension preferences before exporting to PDF.   
-
-Upload this PDF into Moodle for submission including a copy of your presentation slides.
-
 ## Link to GitHub Repository
 
 Flutter Application Name - My Recipe
-GitHub Repository - [https://github.com/yifang2023/casa0015-MyRecipe/edit/main/submission-file.md]
+GitHub Repository - [https://github.com/yifang2023/casa0015-MyRecipe/](https://github.com/yifang2023/casa0015-MyRecipe/)
 
 ## Introduction to Application
 

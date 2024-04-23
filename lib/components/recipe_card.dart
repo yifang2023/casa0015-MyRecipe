@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
+// Recipe card widget
 class RecipeCard extends StatelessWidget {
-  final String imageUrl; // 食谱图片URL
-  final String title; // 食谱标题
-  final String duration; // 烹饪时间
+  final String imageUrl;
+  final String title;
+  final String duration;
 
-  // 构造函数，接收必要的参数
   RecipeCard({
     required this.imageUrl,
     required this.title,
@@ -16,19 +16,18 @@ class RecipeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12), // 设置卡片边角为圆角
+        borderRadius: BorderRadius.circular(12),
       ),
-      elevation: 4, // 卡片阴影
+      elevation: 4,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           ClipRRect(
-            borderRadius:
-                BorderRadius.vertical(top: Radius.circular(12)), // 图片顶部圆角
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
             child: Image.network(
               imageUrl,
-              height: 100, // 图片高度
-              width: double.infinity, // 图片宽度填满卡片
+              height: 100,
+              width: double.infinity,
               fit: BoxFit.cover,
             ),
           ),
@@ -37,12 +36,11 @@ class RecipeCard extends StatelessWidget {
             child: Center(
               child: Text(
                 title,
-                style: TextStyle(
-                  // fontSize: 16,
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
                 maxLines: 2,
-                overflow: TextOverflow.ellipsis, // 文字超出部分显示省略号
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ),

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 
+// Picture previewer page
 class PicPreviewerPage extends StatefulWidget {
   final String imageUrl;
 

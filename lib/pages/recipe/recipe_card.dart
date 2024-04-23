@@ -1,79 +1,6 @@
-// part of 'recipe_page.dart';
-
-// class RecipeCard extends StatelessWidget {
-//   final RecipeBean data;
-
-//   const RecipeCard({super.key, required this.data});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Card(
-//       shape: RoundedRectangleBorder(
-//         borderRadius: BorderRadius.circular(12), // 设置卡片边角为圆角。
-//       ),
-//       elevation: 4, // 卡片阴影。
-//       color: Color(0xFFF2F4FB), // 设置卡片的背景颜色。
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: <Widget>[
-//           ClipRRect(
-//             borderRadius: const BorderRadius.vertical(
-//                 top: Radius.circular(12)), // 图片顶部圆角。
-//             child: Image.network(
-//               data.coverUrl,
-//               height: 130, // 图片高度。
-//               width: double.infinity, // 图片宽度填满卡片。
-//               fit: BoxFit.cover,
-//             ),
-//             // child: Expanded(
-//             //   child: Image.network(
-//             //     data.coverUrl,
-//             //     fit: BoxFit
-//             //         .cover, // Image will cover the entire space of the container.
-//             //   ),
-//             // ),
-//           ),
-//           Padding(
-//             padding: const EdgeInsets.all(8.0),
-//             child: Center(
-//               child: Text(
-//                 data.title, // 卡片标题。
-//                 style: const TextStyle(
-//                   // fontSize: 18,
-//                   fontWeight: FontWeight.bold,
-//                   color: Color(0xFF001F4C), // 设置标题颜色。
-//                 ),
-//                 maxLines: 2,
-//                 overflow: TextOverflow.ellipsis, // 文字超出部分显示省略号。
-//               ),
-//             ),
-//           ),
-//           Padding(
-//             padding: const EdgeInsets.only(left: 80, bottom: 8.0),
-//             child: Row(
-//               mainAxisSize: MainAxisSize.min, // 确保 Row 的大小仅足以包含图标和文本。
-//               children: <Widget>[
-//                 Icon(Icons.access_time,
-//                     color: Colors.grey, size: 14), // 添加时钟图标。
-//                 SizedBox(width: 4), // 在图标和文本之间添加一些间隔。
-//                 Text(
-//                   data.getDuration(), // 烹饪时长显示。
-//                   style: const TextStyle(
-//                     fontSize: 14,
-//                     color: Colors.grey,
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
 part of 'recipe_page.dart';
 
+// recipe car widget
 class RecipeCard extends StatelessWidget {
   final RecipeBean data;
 
@@ -83,23 +10,22 @@ class RecipeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12), // 设置卡片边角为圆角。
+        borderRadius: BorderRadius.circular(12),
       ),
-      elevation: 4, // 卡片阴影。
-      color: Color(0xFFF2F4FB), // 设置卡片的背景颜色。
+      elevation: 4,
+      color: Color(0xFFF2F4FB), // background color of the card
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           ClipRRect(
-            borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(12)), // 图片顶部圆角。
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
             child: AspectRatio(
               aspectRatio: 1.6,
               child: SizedBox(
                 width: double.infinity,
                 child: Image.network(
                   data.coverUrl,
-                  width: double.infinity, // 图片宽度填满卡片。
+                  width: double.infinity, // image width fills the card
                   fit: BoxFit.cover,
                 ),
               ),
@@ -109,14 +35,14 @@ class RecipeCard extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Center(
               child: Text(
-                data.title, // 卡片标题。
+                data.title, // card title
                 style: const TextStyle(
                   // fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF001F4C), // 设置标题颜色。
+                  color: Color(0xFF001F4C), // title color
                 ),
                 maxLines: 2,
-                overflow: TextOverflow.ellipsis, // 文字超出部分显示省略号。
+                overflow: TextOverflow.ellipsis, // show ellipsis for overflow
               ),
             ),
           ),
@@ -125,16 +51,16 @@ class RecipeCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               const Icon(Icons.access_time,
-                  color: Colors.grey, size: 14), // 添加时钟图标。
-              const SizedBox(width: 4), // 在图标和文本之间添加一些间隔。
+                  color: Colors.grey, size: 14), // add clock icon
+              const SizedBox(width: 4),
               Text(
-                data.getDuration(), // 烹饪时长显示。
+                data.getDuration(), // show cooking duration
                 style: const TextStyle(
                   fontSize: 14,
                   color: Colors.grey,
                 ),
               ),
-              const SizedBox(width: 8), //
+              const SizedBox(width: 8),
             ],
           ),
         ],

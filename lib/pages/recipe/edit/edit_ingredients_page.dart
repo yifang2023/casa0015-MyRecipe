@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// Edit ingredients page
 class EditIngredientsPage extends StatefulWidget {
   final List<Map<String, String>> arguments;
   final Function(List<Map<String, String>>) callBack;
@@ -75,6 +76,7 @@ class _EditIngredientsPageState extends State<EditIngredientsPage> {
     );
   }
 
+// item widget
   Widget _item(Map<String, String> value, {void Function()? onTap}) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),

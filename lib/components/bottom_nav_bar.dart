@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
+// navigation bar
 class MyBottomNavBar extends StatelessWidget {
   void Function(int)? onTabChange;
   MyBottomNavBar({super.key, required this.onTabChange});
@@ -22,10 +23,6 @@ class MyBottomNavBar extends StatelessWidget {
           icon: Icons.home,
           text: 'Recipe',
         ),
-        // GButton(
-        //   icon: Icons.home,
-        //   text: 'Restaurant',
-        // ),
         GButton(
           icon: Icons.settings,
           text: 'Settings',

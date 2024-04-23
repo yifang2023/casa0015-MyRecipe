@@ -4,8 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:MyRecipe/pages/forgot_pw_page.dart';
 import 'package:flutter/material.dart';
 
+// login page
 class LoginPage extends StatefulWidget {
-  // showSignUp function
   final VoidCallback showSignUpPage;
   const LoginPage({Key? key, required this.showSignUpPage}) : super(key: key);
 

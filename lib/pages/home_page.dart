@@ -28,9 +28,7 @@ class _HomePageState extends State<HomePage> {
 
 // pages to display in the bottom bar
   final List<Widget> _pages = [
-    // recipe page
     const RecipePage(),
-    // settings page
     const SettingsPage(),
   ];
 

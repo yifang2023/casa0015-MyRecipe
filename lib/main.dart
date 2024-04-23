@@ -1,11 +1,11 @@
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:MyRecipe/auth/main_page.dart'; //第二次commit
+import 'package:MyRecipe/auth/main_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); //初始化Flutter应用程序绑定
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await appCheck();
   runApp(const MyApp());

@@ -10,7 +10,6 @@ class Body extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        // 添加搜索框，搜索功能待添加
         Container(
           margin: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
@@ -32,10 +31,8 @@ class Body extends StatelessWidget {
             ],
           ),
         ),
-        // 在此实现搜索功能
         Categories(),
         Expanded(
-          // 使用 Expanded 包裹 GridView.builder
           child: GridView.builder(
             padding: EdgeInsets.all(10),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -44,9 +41,8 @@ class Body extends StatelessWidget {
               mainAxisSpacing: 10,
               childAspectRatio: 0.8,
             ),
-            itemCount: 10, // 可以动态设置食谱数量
+            itemCount: 10,
             itemBuilder: (context, index) {
-              // 返回食谱卡片，这里仍然使用静态数据
               return RecipeCard(
                 imageUrl: 'https://via.placeholder.com/150',
                 title: 'Delicious Pizza',
@@ -60,6 +56,7 @@ class Body extends StatelessWidget {
   }
 }
 
+// Categories widget
 class Categories extends StatefulWidget {
   const Categories({super.key});
 
@@ -92,6 +89,7 @@ class _CategoriesState extends State<Categories> {
     );
   }
 
+// build category item
   Widget buildCategoryItem(int index) {
     return GestureDetector(
       onTap: () {
