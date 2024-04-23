@@ -98,26 +98,6 @@ class _RecipePageState extends State<RecipePage>
     setState(() {});
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   super.build(context);
-  //   return Column(
-  //     children: [
-  //       _buildHeader(context),
-  //       _buildSearch(context),
-  //       _buildCategory(context),
-  //       Expanded(
-  //         child: RefreshIndicator(
-  //           onRefresh: () async {
-  //             await _refreshList();
-  //           },
-  //           child: _buildContent(context),
-  //         ),
-  //       )
-  //     ],
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);

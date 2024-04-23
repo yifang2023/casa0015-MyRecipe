@@ -39,7 +39,7 @@ class RecipeCard extends StatelessWidget {
               child: Text(
                 data.title, // 卡片标题。
                 style: const TextStyle(
-                  fontSize: 18,
+                  // fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFF001F4C), // 设置标题颜色。
                 ),
