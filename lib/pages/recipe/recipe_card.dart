@@ -94,7 +94,7 @@ class RecipeCard extends StatelessWidget {
             borderRadius: const BorderRadius.vertical(
                 top: Radius.circular(12)), // 图片顶部圆角。
             child: AspectRatio(
-              aspectRatio: 1.4,
+              aspectRatio: 1.6,
               child: SizedBox(
                 width: double.infinity,
                 child: Image.network(
